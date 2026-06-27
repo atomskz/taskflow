@@ -1,0 +1,13 @@
+# Caddy terminates TLS and reverse-proxies to the client (nginx) container.
+# Caddy automatically obtains and renews a Let's Encrypt certificate for the
+# domain and redirects http:// -> https:// on its own.
+#
+# The domain comes from the DOMAIN env var (set it in the root .env file).
+# Requires a DNS A record for that domain -> this server's public IP, and
+# ports 80 + 443 open in the firewall.
+{$DOMAIN} {
+	reverse_proxy client:80
+
+	# Optional: set an email for Let's Encrypt expiry notices.
+	# tls you@example.com
+}

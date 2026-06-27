@@ -1,6 +1,7 @@
 # TaskFlow — full stack in Docker.
-#   docker compose up --build      → http://localhost:8080
-# The client (nginx) serves the SPA and reverse-proxies /api to the server.
+#   docker compose up --build      → https://${DOMAIN}
+# caddy terminates TLS; the client (nginx) serves the SPA and reverse-proxies
+# /api to the server.
 services:
   server:
     build: ./server
@@ -12,15 +13,16 @@ services:
       JWT_SECRET: "${JWT_SECRET:-change-me-to-a-long-random-string}"
       JWT_EXPIRES_IN: "604800"
       DATABASE_FILE: "./data/taskflow.db"
-      CORS_ORIGIN: "*"
+      # Restrict to the public origin; override via .env for other deployments.
+      CORS_ORIGIN: "${CORS_ORIGIN:-https://${DOMAIN}}"
       SEED_DEMO_NAME: "Алекс Морозов"
       SEED_DEMO_EMAIL: "demo@taskflow.app"
       SEED_DEMO_PASSWORD: "demo1234"
     volumes:
       - taskflow-data:/app/data
-    # Exposed for direct API access/debugging; the client talks to it internally.
-    ports:
-      - "4000:4000"
+    # Internal only — the client reverse-proxies /api to it over the compose network.
+    expose:
+      - "4000"
     restart: unless-stopped
 
   client:
@@ -28,9 +30,29 @@ services:
     image: taskflow-client
     depends_on:
       - server
+    # No public port — traffic comes in through caddy over the internal network.
+    expose:
+      - "80"
+    restart: unless-stopped
+
+  # Reverse proxy that terminates TLS and auto-manages Let's Encrypt certs.
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - client
+    environment:
+      # Set DOMAIN in a root .env file, e.g. DOMAIN=taskflow.example.com
+      DOMAIN: "${DOMAIN:?set DOMAIN in your .env file}"
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
     restart: unless-stopped
 
 volumes:
   taskflow-data:
+  caddy-data:
+  caddy-config:
