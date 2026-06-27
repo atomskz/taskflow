@@ -54,7 +54,7 @@
 
 .cal-weekhead {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   background: var(--surface-2);
   border-bottom: 1px solid var(--border);
 }
@@ -70,11 +70,12 @@
 
 .cal-week {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   border-bottom: 1px solid var(--border);
 }
 .cal-day {
   min-height: 114px;
+  min-width: 0;
   border-right: 1px solid var(--border);
   padding: 7px 7px 8px;
   cursor: pointer;
@@ -130,6 +131,7 @@
   background: var(--surface-2);
   cursor: pointer;
   overflow: hidden;
+  min-width: 0;
 }
 .cal-chip:hover {
   background: var(--accent-soft);
