@@ -13,6 +13,11 @@ dist-ssr
 # Backend data (SQLite files)
 server/data
 
+# Playwright e2e artifacts
+test-results
+playwright-report
+.playwright
+
 # Logs / editor / OS
 *.log
 .DS_Store

@@ -16,12 +16,16 @@
     "db:migrate": "npm --prefix server run migrate",
     "db:seed": "npm --prefix server run seed",
     "db:reset": "npm --prefix server run reset",
-    "test": "npm --prefix server test",
+    "test": "npm run test:server && npm run test:client",
+    "test:server": "npm --prefix server test",
+    "test:client": "npm --prefix client test",
+    "test:e2e": "playwright test",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down",
     "docker:reset": "docker compose down -v"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "concurrently": "^9.1.0",
+    "@playwright/test": "^1.48.0"
   }
 }
