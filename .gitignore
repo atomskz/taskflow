@@ -1,0 +1,21 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dist-ssr
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Backend data (SQLite files)
+server/data
+
+# Logs / editor / OS
+*.log
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json

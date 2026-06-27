@@ -1,0 +1,27 @@
+{
+  "name": "taskflow",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TaskFlow — личный таск-менеджер (full-stack monorepo: client + server)",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "preview": "npm --prefix client run preview",
+    "server": "npm --prefix server run dev",
+    "server:start": "npm --prefix server start",
+    "dev:all": "concurrently -n client,server -c blue,green \"npm --prefix client run dev\" \"npm --prefix server run dev\"",
+    "install:all": "npm --prefix client install && npm --prefix server install",
+    "setup": "npm run install:all && npm run db:reset",
+    "db:migrate": "npm --prefix server run migrate",
+    "db:seed": "npm --prefix server run seed",
+    "db:reset": "npm --prefix server run reset",
+    "test": "npm --prefix server test",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down",
+    "docker:reset": "docker compose down -v"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

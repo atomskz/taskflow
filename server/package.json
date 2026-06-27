@@ -1,0 +1,23 @@
+{
+  "name": "taskflow-server",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TaskFlow backend — Express + node:sqlite REST API",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env src/index.js",
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "migrate": "node --env-file-if-exists=.env src/db/migrate.js",
+    "seed": "node --env-file-if-exists=.env src/db/seed.js",
+    "reset": "node --env-file-if-exists=.env src/db/reset.js",
+    "test": "node --env-file-if-exists=.env --test 'test/**/*.test.js'"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "zod": "^3.24.1"
+  }
+}
