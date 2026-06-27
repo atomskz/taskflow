@@ -31,7 +31,6 @@
   display: flex;
   align-items: flex-end;
   gap: 16px;
-  margin-top: -34px;
 }
 .prof-avatar {
   width: 82px;
@@ -44,8 +43,11 @@
   justify-content: center;
   font-weight: 800;
   font-size: 29px;
-  border: 4px solid #fff;
+  border: 4px solid var(--surface);
   box-shadow: var(--sh);
+  /* Only the avatar straddles the banner; the name/email stay below its edge. */
+  margin-top: -41px;
+  flex-shrink: 0;
 }
 .prof-namewrap {
   padding-bottom: 5px;
