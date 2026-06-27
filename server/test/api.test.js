@@ -178,6 +178,36 @@ test('tasks query: filter by status/priority, search, sort, paginate', async () 
   assert.equal(body.tasks.length, 1);
 });
 
+test('dashboard: aggregates counts and lists', async () => {
+  const reg = await fetch(`${base}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Dash', email: 'dash@x.io', password: 'abcd1234' }),
+  });
+  const tok = (await json(reg)).token;
+  const h = () => ({ Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' });
+  const make = (body) => fetch(`${base}/tasks`, { method: 'POST', headers: h(), body: JSON.stringify(body) });
+
+  // one overdue, one high-priority active, one done
+  await make({ title: 'Overdue', dueDate: '2000-01-01', priority: 'high' });
+  await make({ title: 'Active high', priority: 'critical' });
+  const doneRes = await make({ title: 'Finish me', priority: 'low' });
+  const doneId = (await json(doneRes)).task.id;
+  await fetch(`${base}/tasks/${doneId}/complete`, { method: 'POST', headers: h() });
+
+  const res = await fetch(`${base}/dashboard?today=2020-06-15`, { headers: h() });
+  assert.equal(res.status, 200);
+  const { dashboard } = await json(res);
+  assert.equal(dashboard.counts.total, 3);
+  assert.equal(dashboard.counts.active, 2); // overdue + active high
+  assert.equal(dashboard.counts.overdue, 1);
+  assert.equal(dashboard.counts.high, 2); // high + critical, both active
+  assert.equal(dashboard.overdue.length, 1);
+  assert.equal(dashboard.overdue[0].title, 'Overdue');
+  assert.equal(dashboard.statusCounts.done, 1);
+  assert.equal(dashboard.week.days.length, 7);
+});
+
 test('settings: returns defaults, persists a patch, rejects bad values', async () => {
   // defaults for a fresh user
   let res = await fetch(`${base}/settings`, { headers: auth() });

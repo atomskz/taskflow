@@ -215,6 +215,34 @@ type Task = {
 
 ---
 
+## Settings
+
+> Требуют авторизации. UI-настройки хранятся на сервере и синхронизируются между устройствами.
+
+### `GET /api/settings`
+Настройки текущего пользователя (с подстановкой значений по умолчанию).
+
+**200** → `{ "settings": { firstDay, showCompleted, dashCount, dateFormat, theme } }`
+
+### `PATCH /api/settings`
+Частичное обновление: можно передать одно или несколько полей. Неизвестные ключи и недопустимые значения → `400`.
+
+**Body**: любое подмножество `{ firstDay: 'mon'|'sun', showCompleted: boolean, dashCount: 4..10, dateFormat: 'dmy'|'mdy'|'iso', theme: 'light'|'dark' }`
+**200** → `{ "settings": {…} }` (полный объект)
+
+---
+
+## Dashboard
+
+### `GET /api/dashboard`
+Серверные агрегаты для дашборда: счётчики, распределения по статусам/приоритетам, прогресс недели и короткие списки (просроченные/предстоящие/текущие). Не требует загрузки всех задач на клиент.
+
+**Query**: `today` (`YYYY-MM-DD`, необязательно — локальная дата клиента; по умолчанию дата сервера).
+
+**200** → `{ "dashboard": { counts, statusCounts, priorityCounts, week, overdue, upcoming, current } }`
+
+---
+
 ## Сводная таблица
 
 | Метод  | Путь                        | Назначение              | Авторизация |
@@ -233,6 +261,9 @@ type Task = {
 | POST   | `/api/tasks/:id/reopen`     | Вернуть в работу        | ✔           |
 | POST   | `/api/tasks/:id/archive`    | В архив                 | ✔           |
 | POST   | `/api/tasks/reset-demo`     | Сбросить демо-данные    | ✔           |
+| GET    | `/api/settings`             | Настройки пользователя  | ✔           |
+| PATCH  | `/api/settings`             | Обновить настройки       | ✔           |
+| GET    | `/api/dashboard`            | Агрегаты дашборда       | ✔           |
 
 ## Примеры (curl)
 

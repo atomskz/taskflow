@@ -204,6 +204,70 @@ export function buildDashboard(tasks, settings) {
   };
 }
 
+// Build the dashboard view model from the server's aggregated payload
+// (GET /api/dashboard). Counts/lists come from the server; chart geometry and
+// task view models are derived here, mirroring buildDashboard's presentation so
+// the page renders identically without needing the full task list on the client.
+export function buildDashboardFromServer(payload, settings) {
+  const { counts, statusCounts, priorityCounts, week } = payload;
+
+  const statusKeys = ['todo', 'in_progress', 'done', 'archived'];
+  const statusLegend = statusKeys.map((k) => ({
+    key: k,
+    label: ST[k].label,
+    color: ST[k].dot,
+    count: statusCounts[k] || 0,
+  }));
+  const donutTotal = counts.total;
+  const r = 56;
+  const C = 2 * Math.PI * r;
+  let acc = 0;
+  const segs = statusLegend
+    .filter((g) => g.count > 0)
+    .map((g) => {
+      const len = (donutTotal ? g.count / donutTotal : 0) * C;
+      const seg = { color: g.color, dash: len.toFixed(2) + ' ' + (C - len).toFixed(2), offset: (-acc).toFixed(2) };
+      acc += len;
+      return seg;
+    });
+
+  const priKeys = ['critical', 'high', 'medium', 'low'];
+  const priCounts = priKeys.map((k) => ({ key: k, label: PRI[k].label, color: PRI[k].color, count: priorityCounts[k] || 0 }));
+  const maxPri = Math.max(1, ...priCounts.map((p) => p.count));
+  const priorityBars = priCounts.map((p) => ({ label: p.label, color: p.color, count: p.count, pct: Math.round((p.count / maxPri) * 100) }));
+
+  const createdWeek = week.createdWeek;
+  const completedWeek = week.completedWeek;
+  const weekPct = createdWeek > 0 ? Math.round((completedWeek / createdWeek) * 100) : completedWeek > 0 ? 100 : 0;
+  const ringR = 32;
+  const ringC = 2 * Math.PI * ringR;
+  const ringLen = (ringC * Math.min(weekPct, 100)) / 100;
+  const maxW = Math.max(1, ...week.days);
+  const weekBars = week.days.map((count, i) => ({ label: WD[i], count, h: Math.round(6 + (count / maxW) * 28) }));
+
+  return {
+    activeCount: counts.active,
+    activeSub: counts.inProgress + ' в работе',
+    todayCount: counts.today,
+    overdueCount: counts.overdue,
+    doneWeekCount: completedWeek,
+    highCount: counts.high,
+    overdue: payload.overdue.slice(0, 4).map(taskVM),
+    upcoming: payload.upcoming.slice(0, settings.dashCount).map(taskVM),
+    currentCount: counts.active,
+    current: payload.current.map(taskVM),
+    donut: { r, total: donutTotal, segs },
+    statusLegend,
+    priorityBars,
+    weekPct,
+    completedWeek,
+    createdWeek,
+    weekBars,
+    weekRange: fmt(week.rangeStart) + ' – ' + fmt(week.rangeEnd),
+    ring: { dash: ringC.toFixed(2), offset: (ringC - ringLen).toFixed(2) },
+  };
+}
+
 // ---- Tasks list: filter + sort ---------------------------------------------
 export function filterSortTasks(tasks, filters, sort, settings, forced) {
   const tdy = today();

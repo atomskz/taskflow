@@ -546,7 +546,7 @@ export function AppProvider({ children }) {
     tasks, isAuth, user, settings, filters, sort, calYear, calMonth,
     modal, draft, errors, toasts, cmdOpen, cmdQuery, forcedTasks, loading,
     bootstrapping, tasksLoading, tasksError,
-    pagedTasks, pagedTotal, pagedLoading, pagedError, loadMoreTasks,
+    pagedTasks, pagedTotal, pagedLoading, pagedError, loadMoreTasks, tasksVersion,
     authForm, authErrors,
     // actions
     toast, dismissToast,

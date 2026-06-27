@@ -1,9 +1,11 @@
 import './DashboardPage.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../ui.jsx';
 import { useApp } from '../store.jsx';
-import { buildDashboard } from '../lib/tasks.js';
+import { buildDashboard, buildDashboardFromServer } from '../lib/tasks.js';
+import { getDashboard } from '../api/dashboard.js';
+import { iso, today as todayDate } from '../lib/dates.js';
 import { StatusDonut, PriorityBars, WeeklyProgress } from '../components/charts.jsx';
 
 function CompleteBtn({ onClick, soft }) {
@@ -13,12 +15,26 @@ function CompleteBtn({ onClick, soft }) {
 }
 
 export default function DashboardPage() {
-  const { tasks, settings, loading, openDetail, completeTask } = useApp();
+  const { tasks, settings, loading, openDetail, completeTask, tasksVersion } = useApp();
   const navigate = useNavigate();
-  const d = buildDashboard(tasks, settings);
+  const [serverDash, setServerDash] = useState(null);
+  const [failed, setFailed] = useState(false);
+
+  // Fetch server-computed aggregates; refetch after any task mutation. Falls
+  // back to the client-side computation over the in-memory list if it fails.
+  useEffect(() => {
+    let cancelled = false;
+    getDashboard(iso(todayDate()))
+      .then((p) => { if (!cancelled) { setServerDash(p); setFailed(false); } })
+      .catch(() => { if (!cancelled) setFailed(true); });
+    return () => { cancelled = true; };
+  }, [tasksVersion]);
+
+  const useServer = serverDash && !failed;
+  const d = useServer ? buildDashboardFromServer(serverDash, settings) : buildDashboard(tasks, settings);
   const comp = (id) => (e) => { e.stopPropagation(); completeTask(id); };
 
-  if (loading) {
+  if (loading || (!serverDash && !failed)) {
     return (
       <div className="dash-skel-wrap">
         <div className="dash-skel-stats">
