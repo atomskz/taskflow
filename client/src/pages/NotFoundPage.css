@@ -1,0 +1,36 @@
+/* NotFoundPage styles. Static inline styles extracted from NotFoundPage.jsx. */
+
+.nf-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.nf-inner {
+  max-width: 520px;
+  text-align: center;
+  animation: ff 0.3s ease both;
+}
+.nf-code {
+  font-size: 96px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(150deg, #4f46e5, #7c6cf0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+}
+.nf-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 8px 0 0;
+}
+.nf-text {
+  color: var(--text-2);
+  margin: 8px 0 22px;
+}
+.nf-btn {
+  padding: 11px 22px;
+}

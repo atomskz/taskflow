@@ -1,58 +1,7 @@
-// Shared UI primitives: <Hov> (inline hover/focus/active styling) and <Icon>.
-import React, { useState } from 'react';
-import { mix } from './lib/css.js';
-
-// A wrapper that applies hover / focus / active style overrides on top of a base
-// style — the React equivalent of the prototype's style-hover / style-focus attrs.
-export function Hov({
-  as: Tag = 'div',
-  style,
-  styleHover,
-  styleFocus,
-  styleActive,
-  onMouseEnter,
-  onMouseLeave,
-  onMouseDown,
-  onMouseUp,
-  onFocus,
-  onBlur,
-  ...rest
-}) {
-  const [h, setH] = useState(false);
-  const [f, setF] = useState(false);
-  const [a, setA] = useState(false);
-  return (
-    <Tag
-      {...rest}
-      style={mix(style, h && styleHover, f && styleFocus, a && styleActive)}
-      onMouseEnter={(e) => {
-        setH(true);
-        onMouseEnter && onMouseEnter(e);
-      }}
-      onMouseLeave={(e) => {
-        setH(false);
-        setA(false);
-        onMouseLeave && onMouseLeave(e);
-      }}
-      onMouseDown={(e) => {
-        setA(true);
-        onMouseDown && onMouseDown(e);
-      }}
-      onMouseUp={(e) => {
-        setA(false);
-        onMouseUp && onMouseUp(e);
-      }}
-      onFocus={(e) => {
-        setF(true);
-        onFocus && onFocus(e);
-      }}
-      onBlur={(e) => {
-        setF(false);
-        onBlur && onBlur(e);
-      }}
-    />
-  );
-}
+// Shared UI primitive: <Icon>. (Hover/focus styling is now handled by real CSS
+// classes in styles.css and per-component stylesheets, so the old <Hov> wrapper
+// and the css()/mix() helpers were removed.)
+import React from 'react';
 
 const ICONS = {
   check: <path d="M20 6 9 17l-5-5" />,

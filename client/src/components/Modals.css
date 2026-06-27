@@ -1,0 +1,240 @@
+/* Co-located styles for Modals.jsx.
+ * Base classes (modal, modal__*, modal-backdrop*, input, btn*, badge*, tag*,
+ * form-label*, field-error, select*, icon-btn) live in styles.css and are reused.
+ * Only Modals-specific layout/typography lives here, prefixed `mod-`.
+ * Dynamic, data-driven values (priority bar/badge colors) stay inline in JSX.
+ */
+
+/* Modal sizing per type (replaces max-width/margin inline) */
+.mod-form {
+  max-width: 560px;
+  margin: auto 0;
+}
+.mod-detail {
+  max-width: 540px;
+  margin: auto 0;
+  overflow: hidden;
+}
+.mod-confirm {
+  max-width: 400px;
+  padding: 26px;
+  text-align: center;
+}
+
+/* Higher z-index for the confirm backdrop (stacks above detail modal) */
+.modal-backdrop--center.mod-confirm-backdrop {
+  z-index: 82;
+}
+
+/* Square close/icon buttons */
+.mod-close {
+  width: 32px;
+  height: 32px;
+}
+
+/* Form fields */
+.mod-field {
+  display: block;
+}
+.mod-req {
+  color: #dc2626;
+}
+.mod-desc-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mod-counter {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 500;
+}
+.mod-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+/* Date/time inputs share a slightly tighter padding than the base .input. */
+.mod-dt {
+  padding: 9px 12px;
+}
+
+/* Tags editor */
+.mod-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  padding: 7px 9px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 9px;
+  min-height: 42px;
+}
+.mod-taginput {
+  flex: 1;
+  min-width: 110px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13.5px;
+  padding: 3px 2px;
+}
+
+/* Form footer buttons */
+.mod-cancel {
+  padding: 10px 18px;
+  font-weight: 600;
+}
+
+/* ===================== Detail modal ===================== */
+.mod-bar {
+  height: 5px;
+  background: var(--c);
+}
+.mod-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 20px 22px 0;
+}
+.mod-detail-head-main {
+  flex: 1;
+  min-width: 0;
+}
+.mod-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+.mod-detail-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+.mod-detail-title.is-done {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+.mod-detail-body {
+  padding: 16px 22px 20px;
+}
+.mod-desc {
+  font-size: 14.5px;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+.mod-metagrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  overflow: hidden;
+}
+.mod-meta {
+  background: var(--surface);
+  padding: 12px 14px;
+}
+.mod-meta-k {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.mod-meta-v {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.mod-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+.mod-detail-tag {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-2);
+  padding: 3px 9px;
+  background: var(--surface-2);
+  border-radius: 6px;
+}
+.mod-detail-foot {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--border);
+}
+.mod-foot-action {
+  padding: 9px 16px;
+  font-weight: 600;
+  font-size: 13.5px;
+}
+.mod-foot-action--success {
+  padding: 9px 16px;
+  font-size: 13.5px;
+}
+.mod-spacer {
+  flex: 1;
+}
+.mod-icon-action {
+  width: 38px;
+  height: 38px;
+  color: var(--text-2);
+}
+.mod-icon-action--danger {
+  width: 38px;
+  height: 38px;
+}
+
+/* ===================== Confirm modal ===================== */
+.mod-confirm-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #fdeaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+.mod-confirm-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+.mod-confirm-text {
+  color: var(--text-2);
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.mod-confirm-name {
+  color: var(--text);
+}
+.mod-confirm-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.mod-confirm-btn {
+  flex: 1;
+  padding: 11px;
+  font-weight: 600;
+}
+.mod-confirm-btn--danger {
+  flex: 1;
+  padding: 11px;
+}

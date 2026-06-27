@@ -272,28 +272,17 @@ export function buildCalendar(tasks, year, month, settings, openDetail) {
       });
       const inMonth = date.getMonth() === month;
       const isToday = di === tIso;
-      const numBase =
-        'font-size:12.5px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:7px;';
-      const numStyle = isToday
-        ? numBase + 'background:var(--accent);color:#fff;font-weight:700;'
-        : inMonth
-          ? numBase + 'color:var(--text);font-weight:600;'
-          : numBase + 'color:var(--text-3);font-weight:500;';
+      // Emit flags/data only — presentation lives in CalendarPage.css classes.
       days.push({
         iso: di,
         day: date.getDate(),
         inMonth,
         isToday,
-        bg: isToday ? '#f4f5ff' : inMonth ? 'var(--surface)' : '#fbfbfc',
-        numStyle,
         chips: dayTasks.slice(0, 3).map((t) => ({
           id: t.id,
           title: t.title,
+          done: t.status === 'done',
           dotColor: t.status === 'done' ? '#c2c6cd' : PRI[t.priority].color,
-          titleStyle:
-            t.status === 'done'
-              ? 'text-decoration:line-through;color:var(--text-3)'
-              : 'color:var(--text)',
         })),
         more: Math.max(0, dayTasks.length - 3),
       });

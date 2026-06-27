@@ -1,0 +1,182 @@
+/* TasksPage styles. Static inline CSS extracted from TasksPage.jsx.
+ * Reuses base classes from styles.css (page, input, select, chip, btn, skeleton…).
+ * The only dynamic value is the toggle active color, passed via the --toggle CSS var.
+ */
+
+.tasks-page {
+  max-width: 1080px;
+}
+
+.tasks-filterbar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--sh-sm);
+  padding: 13px;
+  margin-bottom: 16px;
+}
+
+.tasks-searchrow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.tasks-searchwrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tasks-searchicon {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+  color: #9a9ca6;
+  display: flex;
+}
+
+.tasks-search {
+  padding: 10px 12px 10px 36px;
+  background: var(--surface-2);
+}
+
+.tasks-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.tasks-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border-2);
+  margin: 0 3px;
+}
+
+.tasks-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--surface);
+  color: var(--text-2);
+  border: 1px solid var(--border-2);
+}
+
+.tasks-toggle.is-active {
+  background: var(--toggle);
+  color: #fff;
+  border: none;
+}
+
+.tasks-countrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 3px;
+}
+
+.tasks-count {
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.tasks-countnum {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.tasks-reset {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.tasks-reset:hover {
+  color: var(--accent-text);
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tasks-skel {
+  height: 86px;
+  border-radius: 12px;
+}
+
+.tasks-errcard {
+  background: var(--surface);
+  border: 1px solid #f3d2d2;
+  border-radius: 14px;
+  padding: 44px;
+  text-align: center;
+}
+
+.tasks-erricon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #fdeaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+
+.tasks-errtitle {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.tasks-errtext {
+  color: var(--text-2);
+  margin: 7px 0 18px;
+  font-size: 14px;
+}
+
+.tasks-emptycard {
+  background: var(--surface);
+  border: 1px dashed var(--border-2);
+  border-radius: 14px;
+  padding: 54px 30px;
+  text-align: center;
+}
+
+.tasks-emptyicon {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.tasks-emptytitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.tasks-emptytext {
+  color: var(--text-2);
+  margin: 7px 0 18px;
+  font-size: 14px;
+}

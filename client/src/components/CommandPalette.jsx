@@ -1,7 +1,7 @@
+import './CommandPalette.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { css, mix } from '../lib/css.js';
-import { Hov, Icon } from '../ui.jsx';
+import { Icon } from '../ui.jsx';
 import { useApp } from '../store.jsx';
 import { PRI } from '../lib/constants.js';
 
@@ -37,12 +37,9 @@ export default function CommandPalette() {
   }
 
   return (
-    <div
-      onClick={closeCmd}
-      style={css('position:fixed;inset:0;z-index:85;background:rgba(20,21,28,.42);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:84px 20px;animation:ff .14s ease both')}
-    >
-      <div onClick={(e) => e.stopPropagation()} style={css('width:100%;max-width:560px;background:var(--surface);border-radius:14px;box-shadow:var(--sh-lg);overflow:hidden;animation:pop .2s cubic-bezier(.2,.9,.3,1) both')}>
-        <div style={css('display:flex;align-items:center;gap:11px;padding:15px 17px;border-bottom:1px solid var(--border)')}>
+    <div onClick={closeCmd} className="cmdp-overlay">
+      <div onClick={(e) => e.stopPropagation()} className="cmdp-panel">
+        <div className="cmdp-search">
           <Icon name="search" size={18} color="#9a9ca6" />
           <input
             value={cmdQuery}
@@ -50,21 +47,21 @@ export default function CommandPalette() {
             onKeyDown={(e) => { if (e.key === 'Enter' && results[0]) results[0].run(); }}
             autoFocus
             placeholder="Поиск задач или переход к разделу…"
-            style={css('flex:1;border:none;outline:none;font-size:15px;background:transparent;color:var(--text)')}
+            className="cmdp-input"
           />
-          <span style={css('font-family:var(--mono);font-size:11px;padding:2px 7px;background:var(--surface-2);border:1px solid var(--border);border-radius:5px;color:var(--text-3)')}>esc</span>
+          <span className="cmdp-kbd">esc</span>
         </div>
-        <div style={css('max-height:344px;overflow:auto;padding:8px')}>
+        <div className="cmdp-list">
           {results.map((c, i) => (
-            <Hov as="button" key={i} onClick={c.run} style="display:flex;align-items:center;gap:12px;width:100%;padding:10px 11px;border-radius:9px;text-align:left" styleHover="background:var(--hover)">
-              <span style={css('width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0')}>
+            <button className="cmd-item" key={i} onClick={c.run}>
+              <span className="cmdp-item-icon">
                 <Icon name={c.icon} size={16} color={c.color || '#62636c'} />
               </span>
-              <span style={css('flex:1;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis')}>{c.label}</span>
-              <span style={css('font-size:11px;color:var(--text-3);font-weight:600;flex-shrink:0')}>{c.kind}</span>
-            </Hov>
+              <span className="cmdp-item-label">{c.label}</span>
+              <span className="cmdp-item-kind">{c.kind}</span>
+            </button>
           ))}
-          {results.length === 0 && <div style={css('padding:30px;text-align:center;color:var(--text-3);font-size:14px')}>Ничего не найдено</div>}
+          {results.length === 0 && <div className="cmdp-empty">Ничего не найдено</div>}
         </div>
       </div>
     </div>

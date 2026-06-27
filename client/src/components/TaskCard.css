@@ -1,0 +1,63 @@
+/* TaskCard component styles.
+ * Static inline styles extracted from TaskCard.jsx into co-located classes.
+ * Composes with shared base classes from styles.css (card, badge, tag, etc.).
+ * Dynamic, data-driven values (priority/badge/due colors, status dot,
+ * done-state line-through) stay in JSX via CSS custom properties or
+ * conditional classNames.
+ */
+
+.tc-card {
+  display: flex;
+  gap: 13px;
+  padding: 14px 15px;
+  cursor: pointer;
+}
+.tc-bar {
+  width: 4px;
+  align-self: stretch;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: var(--bar);
+}
+.tc-body {
+  flex: 1;
+  min-width: 0;
+}
+.tc-title {
+  font-weight: 650;
+  font-size: 15px;
+  line-height: 1.35;
+}
+.tc-title.is-done {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+.tc-desc {
+  font-size: 13px;
+  color: var(--text-2);
+  margin: 3px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+  align-items: center;
+}
+.tc-cal-badge {
+  color: var(--text-2);
+  background: var(--surface-2);
+}
+.tc-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 3px;
+  flex-shrink: 0;
+}
+.tc-icon-btn {
+  width: 30px;
+  height: 30px;
+}

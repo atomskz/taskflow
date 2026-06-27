@@ -1,17 +1,10 @@
+import './TaskCard.css';
 import React from 'react';
-import { css, mix } from '../lib/css.js';
-import { Hov, Icon } from '../ui.jsx';
+import { Icon } from '../ui.jsx';
 import { useApp } from '../store.jsx';
-
-const BADGE = 'display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:7px;font-size:12px;font-weight:600;';
 
 export default function TaskCard({ vm }) {
   const { openDetail, openEdit, openConfirm, completeTask, reopenTask } = useApp();
-
-  const checkStyle = vm.isDone
-    ? 'width:21px;height:21px;border-radius:6px;background:#16a34a;border:2px solid #16a34a;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;cursor:pointer'
-    : 'width:21px;height:21px;border-radius:6px;border:2px solid var(--border-2);background:var(--surface);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:transparent';
-  const checkHover = vm.isDone ? 'opacity:0.85' : 'border-color:#16a34a;background:#e7f6ed';
 
   const toggle = (e) => {
     e.stopPropagation();
@@ -27,77 +20,54 @@ export default function TaskCard({ vm }) {
   };
 
   return (
-    <Hov
+    <div
       onClick={() => openDetail(vm.id)}
-      style="display:flex;gap:13px;padding:14px 15px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--sh-sm);cursor:pointer;transition:box-shadow .14s,border-color .14s"
-      styleHover="box-shadow:var(--sh-md);border-color:var(--border-2)"
+      className="card card--hover tc-card"
     >
-      <Hov as="button" title="Завершить" onClick={toggle} style={checkStyle} styleHover={checkHover}>
+      <button type="button" title="Завершить" onClick={toggle} className={'task-check' + (vm.isDone ? ' is-done' : '')}>
         <Icon name="check" size={13} strokeWidth={3} />
-      </Hov>
-      <span style={mix('width:4px;align-self:stretch;border-radius:4px;flex-shrink:0', { background: vm.priColor })} />
-      <div style={css('flex:1;min-width:0')}>
-        <div
-          style={mix(
-            'font-weight:650;font-size:15px;line-height:1.35',
-            vm.isDone && 'text-decoration:line-through;color:var(--text-3)'
-          )}
-        >
+      </button>
+      <span className="tc-bar" style={{ '--bar': vm.priColor }} />
+      <div className="tc-body">
+        <div className={'tc-title' + (vm.isDone ? ' is-done' : '')}>
           {vm.title}
         </div>
         {vm.hasDesc && (
-          <p style={css('font-size:13px;color:var(--text-2);margin:3px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis')}>
+          <p className="tc-desc">
             {vm.description}
           </p>
         )}
-        <div style={css('display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;align-items:center')}>
-          <span style={mix(BADGE, { color: vm.stColor, background: vm.stSoft })}>
-            <span style={mix('width:6px;height:6px;border-radius:50%', { background: vm.stDot })} />
+        <div className="tc-meta">
+          <span className="badge" style={{ color: vm.stColor, background: vm.stSoft }}>
+            <span className="badge-dot" style={{ background: vm.stDot }} />
             {vm.stLabel}
           </span>
-          <span style={mix(BADGE, { color: vm.priColor, background: vm.priSoft })}>{vm.priLabel}</span>
+          <span className="badge" style={{ color: vm.priColor, background: vm.priSoft }}>{vm.priLabel}</span>
           {vm.hasDue && (
-            <span style={mix(BADGE, { color: vm.dueColor, background: vm.dueBg })}>
+            <span className="badge" style={{ color: vm.dueColor, background: vm.dueBg }}>
               <Icon name="clock" size={12} strokeWidth={2.2} />
               {vm.dueText}
             </span>
           )}
           {vm.hasCal && (
-            <span style={mix(BADGE, 'color:var(--text-2);background:var(--surface-2)')}>
+            <span className="badge tc-cal-badge">
               <Icon name="calendar" size={12} />
               {vm.cal}
             </span>
           )}
           {vm.tags.map((tag) => (
-            <span
-              key={tag}
-              style={css('font-family:var(--mono);font-size:11px;font-weight:500;color:var(--text-3);padding:2px 7px;background:var(--surface-2);border-radius:6px')}
-            >
-              #{tag}
-            </span>
+            <span key={tag} className="tag">#{tag}</span>
           ))}
         </div>
       </div>
-      <div style={css('display:flex;align-items:flex-start;gap:3px;flex-shrink:0')}>
-        <Hov
-          as="button"
-          title="Редактировать"
-          onClick={edit}
-          style="width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-3)"
-          styleHover="background:var(--hover);color:var(--text)"
-        >
+      <div className="tc-actions">
+        <button type="button" title="Редактировать" onClick={edit} className="icon-btn tc-icon-btn">
           <Icon name="edit" size={16} />
-        </Hov>
-        <Hov
-          as="button"
-          title="Удалить"
-          onClick={del}
-          style="width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-3)"
-          styleHover="background:#fdeaea;color:#dc2626"
-        >
+        </button>
+        <button type="button" title="Удалить" onClick={del} className="icon-btn icon-btn--danger tc-icon-btn">
           <Icon name="trash" size={16} />
-        </Hov>
+        </button>
       </div>
-    </Hov>
+    </div>
   );
 }

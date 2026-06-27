@@ -1,0 +1,202 @@
+/* Chart component styles.
+ * Static inline styles from charts.jsx extracted into prefixed `chart-` classes.
+ * Base classes (card, card--pad, panel-title) live in styles.css.
+ * Dynamic, data-driven values stay inline as CSS custom properties.
+ */
+
+/* ============================ StatusDonut ============================ */
+.chart-title {
+  margin-bottom: 14px;
+}
+.chart-donut-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.chart-donut-wrap {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  flex-shrink: 0;
+}
+.chart-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.chart-donut-total {
+  font-size: 26px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.chart-donut-label {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.chart-legend {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.chart-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.chart-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--c);
+}
+.chart-legend-name {
+  font-size: 13px;
+  color: var(--text-2);
+  flex: 1;
+}
+.chart-legend-count {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================ PriorityBars ============================ */
+.chart-title--bars {
+  margin-bottom: 15px;
+}
+.chart-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.chart-bar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.chart-bar-label {
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+.chart-bar-count {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.chart-bar-track {
+  height: 8px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.chart-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  animation: growW 0.6s ease both;
+  width: var(--w);
+  background: var(--c);
+}
+
+/* ============================ WeeklyProgress ============================ */
+.chart-week-card {
+  background: linear-gradient(150deg, #4f46e5, #6d5ef0);
+  border-radius: 14px;
+  box-shadow: var(--sh-md);
+  padding: 18px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.chart-week-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(300px 160px at 90% 0%, rgba(255, 255, 255, 0.18), transparent 60%);
+}
+.chart-week-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.chart-week-heading {
+  font-weight: 700;
+  font-size: 15px;
+}
+.chart-week-range {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+}
+.chart-week-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.chart-ring-wrap {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  flex-shrink: 0;
+}
+.chart-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  font-weight: 800;
+}
+.chart-week-stats {
+  flex: 1;
+}
+.chart-week-counts {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.chart-week-done {
+  font-size: 24px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.chart-week-created {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+.chart-weekbars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 38px;
+  margin-top: 10px;
+}
+.chart-weekbar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.chart-weekbar {
+  width: 100%;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.85);
+  min-height: 3px;
+  height: var(--h);
+}
+.chart-weekbar-label {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}

@@ -1,0 +1,93 @@
+/* Command palette — co-located styles.
+ * Reuses base .cmd-item (result row) from styles.css; do not redefine here.
+ */
+
+.cmdp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  background: rgba(20, 21, 28, 0.42);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 84px 20px;
+  animation: ff 0.14s ease both;
+}
+
+.cmdp-panel {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border-radius: 14px;
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+  animation: pop 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.cmdp-search {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 15px 17px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cmdp-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  color: var(--text);
+}
+
+.cmdp-kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 2px 7px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-3);
+}
+
+.cmdp-list {
+  max-height: 344px;
+  overflow: auto;
+  padding: 8px;
+}
+
+.cmdp-item-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cmdp-item-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cmdp-item-kind {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.cmdp-empty {
+  padding: 30px;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 14px;
+}

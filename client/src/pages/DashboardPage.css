@@ -1,0 +1,230 @@
+/* DashboardPage styles. Static inline CSS extracted from DashboardPage.jsx.
+ * Base/shared classes (page, card, stat, panel-head, etc.) live in styles.css.
+ * Dynamic, data-driven values (priority colors, when color, status badge colors)
+ * stay inline via CSS custom properties.
+ */
+
+.dash-page {
+  max-width: 1200px;
+}
+
+/* ---- Loading skeleton ---- */
+.dash-skel-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.dash-skel-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.dash-skel-stat {
+  height: 104px;
+  border-radius: 12px;
+}
+.dash-skel-cols {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 16px;
+}
+.dash-skel-panel {
+  height: 340px;
+  border-radius: 14px;
+}
+
+/* ---- Stat cards grid ---- */
+.dash-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.dash-stat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Stat number colors (static per card) */
+.dash-num-blue {
+  color: #2563eb;
+}
+.dash-num-red {
+  color: #dc2626;
+}
+.dash-num-green {
+  color: #16a34a;
+}
+.dash-num-orange {
+  color: #ea580c;
+}
+
+/* Stat chip backgrounds (static per card) */
+.dash-chip-accent {
+  background: var(--accent-soft);
+}
+.dash-chip-blue {
+  background: #e8f0fe;
+}
+.dash-chip-red {
+  background: #fdeaea;
+}
+.dash-chip-green {
+  background: #e7f6ed;
+}
+.dash-chip-orange {
+  background: #fdece1;
+}
+
+/* ---- Columns layout ---- */
+.dash-cols {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.dash-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---- Overdue card ---- */
+.dash-overdue-card {
+  background: var(--surface);
+  border: 1px solid #f3d2d2;
+  border-radius: 14px;
+  box-shadow: var(--sh-sm);
+  overflow: hidden;
+}
+.dash-overdue-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 18px 13px;
+  border-bottom: 1px solid var(--border);
+}
+.dash-overdue-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dc2626;
+}
+.dash-overdue-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #dc2626;
+  background: #fdeaea;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ---- List rows (replaces <Hov>) ---- */
+.dash-list {
+  padding: 8px;
+}
+.dash-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.dash-row:hover {
+  background: var(--hover);
+}
+.dash-row--overdue {
+  padding: 10px 11px;
+}
+
+.dash-row-main {
+  flex: 1;
+  min-width: 0;
+}
+.dash-row-title {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-row-meta {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dash-row-time {
+  font-family: var(--mono);
+}
+
+/* Overdue row due text */
+.dash-due {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #dc2626;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+/* Small priority dot (overdue rows) */
+.dash-pri-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--c);
+}
+/* Priority bar (upcoming rows) */
+.dash-pri-bar {
+  width: 8px;
+  height: 34px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: var(--c);
+}
+/* When text (upcoming rows) */
+.dash-when {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+/* Status badge (current rows) */
+.dash-status {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* ---- Empty state (upcoming) ---- */
+.dash-empty {
+  padding: 34px;
+  text-align: center;
+  color: var(--text-3);
+}
+.dash-empty-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.dash-empty-sub {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* ---- Card overflow / panel-head count ---- */
+.dash-card-clip {
+  overflow: hidden;
+}
+.dash-head-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-3);
+}

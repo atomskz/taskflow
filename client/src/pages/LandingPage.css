@@ -1,0 +1,464 @@
+/* LandingPage styles — marketing/hero/preview/features/CTA/footer.
+ * Extracted from inline css()/mix()/<Hov> into co-located classes.
+ * Real CSS :hover replaces the JS <Hov> wrapper. Dynamic, data-driven
+ * colors (feature chip bg, preview stat/dot colors) come in via CSS vars.
+ */
+
+.land-root {
+  position: relative;
+  overflow: hidden;
+}
+.land-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(900px 480px at 82% -8%, rgba(79, 70, 229, 0.1), transparent 60%),
+    radial-gradient(700px 420px at 6% 4%, rgba(37, 99, 235, 0.06), transparent 55%);
+  pointer-events: none;
+}
+
+/* ============================ Header ============================ */
+.land-header {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.land-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.land-brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(150deg, #4f46e5, #7c6cf0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
+.land-brand-name {
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+.land-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.land-nav-login {
+  padding: 9px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  border-radius: 8px;
+}
+.land-nav-login:hover {
+  background: var(--hover);
+}
+.land-nav-cta {
+  padding: 9px 18px;
+  font-size: 14px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+/* ============================ Hero ============================ */
+.land-hero {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 64px 32px 40px;
+  text-align: center;
+}
+.land-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--sh-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 26px;
+}
+.land-hero-badge-tag {
+  padding: 2px 9px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.land-hero-title {
+  font-size: 60px;
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  margin: 0 auto;
+  max-width: 840px;
+}
+.land-hero-lead {
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--text-2);
+  max-width: 600px;
+  margin: 22px auto 0;
+}
+.land-hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 34px;
+}
+.land-cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.32);
+}
+.land-cta:hover {
+  background: var(--accent-h);
+  transform: translateY(-1px);
+}
+.land-cta-ghost {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 22px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  box-shadow: var(--sh-sm);
+}
+.land-cta-ghost:hover {
+  background: var(--hover);
+}
+.land-hero-note {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 16px;
+}
+
+/* ============================ Product preview ============================ */
+.land-preview {
+  position: relative;
+  max-width: 1080px;
+  margin: 18px auto 0;
+  padding: 0 32px;
+}
+.land-preview-window {
+  border-radius: 16px 16px 0 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.6) inset, 0 30px 80px rgba(24, 25, 34, 0.16);
+  overflow: hidden;
+}
+.land-preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.land-preview-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.land-preview-dot--red {
+  background: #f0625b;
+}
+.land-preview-dot--yellow {
+  background: #f6b73c;
+}
+.land-preview-dot--green {
+  background: #3ec45f;
+}
+.land-preview-url {
+  margin-left: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-3);
+}
+.land-preview-body {
+  padding: 18px;
+  background: var(--canvas);
+}
+.land-preview-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.land-preview-stat {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+.land-preview-stat-label {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.land-preview-stat-num {
+  font-size: 26px;
+  font-weight: 800;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+  color: var(--num-color);
+}
+.land-preview-cols {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 12px;
+}
+.land-preview-list {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.land-preview-list-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.land-preview-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.land-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 11px;
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+.land-preview-row-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot-color);
+}
+.land-preview-row-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  flex: 1;
+}
+.land-preview-row-when {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+.land-preview-donut {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.land-preview-donut-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 10px;
+  align-self: flex-start;
+}
+
+/* ============================ Features ============================ */
+.land-features {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 72px 32px;
+}
+.land-features-head {
+  text-align: center;
+  margin-bottom: 44px;
+}
+.land-features-eyebrow {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent-text);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.land-features-title {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 12px 0 0;
+}
+.land-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.land-feature {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: var(--sh-sm);
+}
+.land-feature:hover {
+  box-shadow: var(--sh-md);
+  transform: translateY(-2px);
+}
+.land-feature-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  background: var(--bg);
+}
+.land-feature-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 7px;
+}
+.land-feature-text {
+  font-size: 14px;
+  color: var(--text-2);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ============================ CTA ============================ */
+.land-cta-section {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px 72px;
+}
+.land-cta-box {
+  background: linear-gradient(135deg, #1c1d22, #2b2c39);
+  border-radius: 20px;
+  padding: 52px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.land-cta-box-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px 300px at 80% 0%, rgba(124, 108, 240, 0.35), transparent 60%);
+}
+.land-cta-title {
+  position: relative;
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+.land-cta-lead {
+  position: relative;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 14px 0 28px;
+}
+.land-cta-actions {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.land-cta-light {
+  padding: 13px 26px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1c1d22;
+  background: #fff;
+  border-radius: 10px;
+}
+.land-cta-light:hover {
+  transform: translateY(-1px);
+}
+.land-cta-outline {
+  padding: 13px 24px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+.land-cta-outline:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================ Footer ============================ */
+.land-footer {
+  position: relative;
+  border-top: 1px solid var(--border);
+  padding: 28px 32px;
+}
+.land-footer-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.land-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-2);
+}
+.land-footer-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: linear-gradient(150deg, #4f46e5, #7c6cf0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.land-footer-name {
+  font-weight: 700;
+  color: var(--text);
+}
+.land-footer-tagline {
+  font-size: 13px;
+  color: var(--text-3);
+}
+.land-footer-stack {
+  font-size: 13px;
+  color: var(--text-3);
+  font-family: var(--mono);
+}

@@ -1,0 +1,131 @@
+/* ProfilePage styles. Co-located classes (prefix prof-) extracted from inline.
+ * Base classes (page, card, btn, btn--ghost, btn--soft-danger) come from styles.css.
+ */
+
+.prof-page {
+  max-width: 760px;
+}
+
+.prof-header-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--sh-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.prof-banner {
+  height: 92px;
+  background: linear-gradient(120deg, #4f46e5, #6d5ef0);
+  position: relative;
+}
+.prof-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(300px 160px at 85% 0%, rgba(255, 255, 255, 0.2), transparent 60%);
+}
+.prof-header-body {
+  padding: 0 26px 24px;
+}
+.prof-identity {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: -34px;
+}
+.prof-avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: 22px;
+  background: var(--accent-soft-2);
+  color: var(--accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 29px;
+  border: 4px solid #fff;
+  box-shadow: var(--sh);
+}
+.prof-namewrap {
+  padding-bottom: 5px;
+  flex: 1;
+  min-width: 0;
+}
+.prof-name {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.prof-email {
+  color: var(--text-2);
+  margin: 2px 0 0;
+  font-size: 14px;
+}
+.prof-join {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+.prof-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  margin-bottom: 16px;
+}
+.prof-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 17px;
+  box-shadow: var(--sh-sm);
+}
+.prof-tile-k {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.prof-tile-n {
+  font-size: 28px;
+  font-weight: 800;
+  margin-top: 7px;
+  font-variant-numeric: tabular-nums;
+}
+.prof-tile-n--green {
+  color: #16a34a;
+}
+.prof-tile-n--accent {
+  color: var(--accent-text);
+}
+
+.prof-manage {
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.prof-manage-title {
+  font-weight: 700;
+  font-size: 15px;
+}
+.prof-manage-sub {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-top: 2px;
+}
+.prof-manage-actions {
+  display: flex;
+  gap: 9px;
+}
+.prof-manage-btn {
+  padding: 9px 16px;
+  font-weight: 600;
+  font-size: 13.5px;
+}
