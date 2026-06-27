@@ -25,7 +25,7 @@
   background: radial-gradient(300px 160px at 85% 0%, rgba(255, 255, 255, 0.2), transparent 60%);
 }
 .prof-header-body {
-  padding: 0 26px 24px;
+  padding: 14px 26px 24px;
 }
 .prof-identity {
   display: flex;
@@ -45,8 +45,9 @@
   font-size: 29px;
   border: 4px solid var(--surface);
   box-shadow: var(--sh);
-  /* Only the avatar straddles the banner; the name/email stay below its edge. */
-  margin-top: -41px;
+  /* Only the avatar straddles the banner; the name/email stay below its edge
+     (body padding-top adds the gap, this keeps the avatar overlapping). */
+  margin-top: -55px;
   flex-shrink: 0;
 }
 .prof-namewrap {
