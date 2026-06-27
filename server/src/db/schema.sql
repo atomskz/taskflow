@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
   email         TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   avatar_url    TEXT,
+  settings      TEXT NOT NULL DEFAULT '{}',  -- JSON object of UI preferences
   created_at    TEXT NOT NULL,
   updated_at    TEXT NOT NULL
 );
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   end_time      TEXT,            -- 'HH:MM' | NULL
   tags          TEXT NOT NULL DEFAULT '[]',  -- JSON array of strings
   completed_at  TEXT,            -- ISO timestamp | NULL
+  deleted_at    TEXT,            -- ISO timestamp | NULL (soft delete / trash)
   created_at    TEXT NOT NULL,
   updated_at    TEXT NOT NULL
 );

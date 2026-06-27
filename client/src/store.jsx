@@ -2,11 +2,12 @@
 // Domain data (user, tasks) comes from the backend REST API via src/api/*.
 // Only UI preferences (settings) are persisted locally. The public shape of
 // `useApp()` is intentionally stable so page/components need no changes.
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { uid } from './lib/dates.js';
 import { ApiError } from './api/client.js';
 import * as authApi from './api/auth.js';
 import * as tasksApi from './api/tasks.js';
+import * as settingsApi from './api/settings.js';
 
 const SETTINGS_KEY = 'taskflow.settings.v1';
 
@@ -75,7 +76,9 @@ export function AppProvider({ children }) {
   const [authForm, setAuthForm] = useState({ name: '', email: DEMO_EMAIL, password: '', confirm: '' });
   const [authErrors, setAuthErrors] = useState({});
 
-  // Persist UI settings only (not domain data).
+  // Persist UI settings to localStorage as an instant-load cache. The server is
+  // the source of truth (synced below); this cache just avoids a flash of
+  // defaults before the server responds, and works offline.
   useEffect(() => {
     try {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
@@ -83,6 +86,20 @@ export function AppProvider({ children }) {
       /* ignore quota / private mode errors */
     }
   }, [settings]);
+
+  // Debounced server sync for settings. Accumulates changed fields and flushes
+  // a single PATCH so dragging a slider doesn't spam the API.
+  const settingsSaveTimer = useRef(null);
+  const pendingSettings = useRef({});
+
+  const loadServerSettings = async () => {
+    try {
+      const s = await settingsApi.getSettings();
+      setSettings((prev) => ({ ...prev, ...s }));
+    } catch {
+      /* keep the localStorage cache if the server is unreachable */
+    }
+  };
 
   // ---- toasts ----
   const toast = (type, message) => {
@@ -138,7 +155,7 @@ export function AppProvider({ children }) {
         if (cancelled) return;
         setUser(u);
         setIsAuth(true);
-        await fetchTasks();
+        await Promise.all([fetchTasks(), loadServerSettings()]);
       } catch {
         // Invalid/expired token — clear and fall back to logged-out state.
         authApi.logout();
@@ -168,7 +185,7 @@ export function AppProvider({ children }) {
     setAuthErrors({});
     setLoading(true);
     try {
-      await fetchTasks();
+      await Promise.all([fetchTasks(), loadServerSettings()]);
     } catch {
       /* tasksError handles the message */
     } finally {
@@ -405,7 +422,21 @@ export function AppProvider({ children }) {
   };
 
   // ---- settings ----
-  const setSetting = (field, val) => setSettings((s) => ({ ...s, [field]: val }));
+  const setSetting = (field, val) => {
+    setSettings((s) => ({ ...s, [field]: val }));
+    // Queue a server sync (debounced). localStorage is updated by the effect
+    // above regardless, so the change is never lost if the request fails.
+    if (!isAuth) return;
+    pendingSettings.current[field] = val;
+    clearTimeout(settingsSaveTimer.current);
+    settingsSaveTimer.current = setTimeout(() => {
+      const patch = pendingSettings.current;
+      pendingSettings.current = {};
+      settingsApi.updateSettings(patch).catch(() => {
+        /* non-fatal: localStorage cache still holds the change */
+      });
+    }, 500);
+  };
   const resetDemo = async () => {
     try {
       const list = await tasksApi.resetDemoTasks();

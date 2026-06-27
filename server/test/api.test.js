@@ -131,6 +131,39 @@ test('create rejects endTime before startTime', async () => {
   assert.ok(body.error.fields.endTime);
 });
 
+test('settings: returns defaults, persists a patch, rejects bad values', async () => {
+  // defaults for a fresh user
+  let res = await fetch(`${base}/settings`, { headers: auth() });
+  assert.equal(res.status, 200);
+  let body = await json(res);
+  assert.equal(body.settings.theme, 'light');
+  assert.equal(body.settings.dashCount, 6);
+
+  // partial update is merged and echoed back in full
+  res = await fetch(`${base}/settings`, {
+    method: 'PATCH',
+    headers: auth(),
+    body: JSON.stringify({ theme: 'dark', dashCount: 9 }),
+  });
+  assert.equal(res.status, 200);
+  body = await json(res);
+  assert.equal(body.settings.theme, 'dark');
+  assert.equal(body.settings.dashCount, 9);
+  assert.equal(body.settings.firstDay, 'mon'); // untouched default preserved
+
+  // persisted across requests
+  res = await fetch(`${base}/settings`, { headers: auth() });
+  assert.equal((await json(res)).settings.theme, 'dark');
+
+  // invalid value rejected
+  res = await fetch(`${base}/settings`, {
+    method: 'PATCH',
+    headers: auth(),
+    body: JSON.stringify({ dashCount: 99 }),
+  });
+  assert.equal(res.status, 400);
+});
+
 test('users only see their own tasks', async () => {
   // second user
   const r = await fetch(`${base}/auth/register`, {

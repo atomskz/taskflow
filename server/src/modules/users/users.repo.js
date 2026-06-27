@@ -20,6 +20,21 @@ export function findById(id) {
   return db.prepare('SELECT * FROM users WHERE id = ?').get(id);
 }
 
+// Raw settings JSON for a user ('{}' when never set). Parsing/merging with
+// defaults is the settings service's job.
+export function getSettingsRaw(id) {
+  const row = db.prepare('SELECT settings FROM users WHERE id = ?').get(id);
+  return row ? row.settings : null;
+}
+
+export function saveSettings(id, settingsJson) {
+  db.prepare('UPDATE users SET settings = ?, updated_at = ? WHERE id = ?').run(
+    settingsJson,
+    nowIso(),
+    id
+  );
+}
+
 // Strip the password hash before sending a user to the client.
 export function toPublicUser(row) {
   if (!row) return null;

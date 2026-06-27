@@ -5,6 +5,7 @@ import cors from 'cors';
 import { config } from './config.js';
 import { authRouter } from './modules/auth/auth.routes.js';
 import { tasksRouter } from './modules/tasks/tasks.routes.js';
+import { settingsRouter } from './modules/settings/settings.routes.js';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
 
 export function createApp() {
@@ -23,6 +24,7 @@ export function createApp() {
   // Feature routers.
   app.use('/api/auth', authRouter);
   app.use('/api/tasks', tasksRouter);
+  app.use('/api/settings', settingsRouter);
 
   // Unknown route + central error handler (must be last).
   app.use(notFoundHandler);
