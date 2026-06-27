@@ -5,6 +5,7 @@ import App from './App.jsx';
 import { AppProvider } from './store.jsx';
 import './index.css';
 import './styles.css';
+import './responsive.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

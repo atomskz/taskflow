@@ -1,0 +1,202 @@
+/* Responsive layer — mobile/tablet adaptations. Loaded last so its rules win
+   over the desktop defaults at the same specificity. Two breakpoints:
+   860px (tablet / app-shell switches to a drawer) and 560px (phones). */
+
+/* ============================ Tablet & below ============================ */
+@media (max-width: 860px) {
+  /* --- App shell: sidebar becomes an off-canvas drawer --- */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: var(--sh-lg);
+    overflow-y: auto;
+  }
+  .sidebar.is-open {
+    transform: none;
+  }
+  .lay-burger {
+    display: flex;
+  }
+
+  /* --- Topbar: tighter, search collapses to an icon button --- */
+  .topbar {
+    padding: 11px 15px;
+    gap: 12px;
+  }
+  .topbar__title {
+    font-size: 17px;
+  }
+  .topbar__sub {
+    display: none;
+  }
+  .topbar__search {
+    min-width: 0;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    padding: 0;
+  }
+  .lay-search-label,
+  .lay-search-kbd {
+    display: none;
+  }
+
+  .app-main {
+    padding: 18px 15px 44px;
+  }
+
+  /* --- Dashboard --- */
+  .dash-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dash-cols {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- Profile --- */
+  .prof-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* --- Landing --- */
+  .land-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================ Phones ============================ */
+@media (max-width: 560px) {
+  .app-main {
+    padding: 14px 12px 40px;
+  }
+
+  /* Dashboard: keep two compact stat columns, stack the rest */
+  .dash-stats-grid {
+    gap: 10px;
+  }
+
+  /* Profile */
+  .prof-tiles {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .prof-manage {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .prof-manage-actions {
+    display: flex;
+  }
+  .prof-manage-btn {
+    flex: 1;
+  }
+
+  /* Tasks: search and sort stack */
+  .tasks-searchrow {
+    flex-wrap: wrap;
+  }
+  .tasks-searchwrap {
+    flex: 1 1 100%;
+  }
+  .tasks-searchrow .select-wrap {
+    flex: 1 1 100%;
+  }
+
+  /* Calendar: shorter cells + smaller type so 7 columns still fit */
+  .cal-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .cal-nav {
+    justify-content: space-between;
+  }
+  .cal-day {
+    min-height: 66px;
+    padding: 5px 4px 6px;
+  }
+  .cal-weekhead-cell {
+    padding: 7px 2px;
+    font-size: 10px;
+  }
+  .cal-chip-title,
+  .cal-more {
+    font-size: 10px;
+  }
+
+  /* Landing: single column, smaller hero, stacked CTAs */
+  .land-header {
+    padding: 16px 18px;
+  }
+  .land-hero {
+    padding: 40px 18px 26px;
+  }
+  .land-hero-title {
+    font-size: 38px;
+  }
+  .land-hero-lead {
+    font-size: 16px;
+  }
+  .land-hero-actions {
+    flex-direction: column;
+  }
+  .land-cta,
+  .land-cta-ghost {
+    justify-content: center;
+  }
+  .land-features {
+    padding: 48px 18px;
+  }
+  .land-features-grid {
+    grid-template-columns: 1fr;
+  }
+  .land-features-title {
+    font-size: 28px;
+  }
+  .land-preview {
+    padding: 0 14px;
+  }
+  .land-preview-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .land-preview-cols {
+    grid-template-columns: 1fr;
+  }
+  .land-cta-box {
+    padding: 40px 22px;
+  }
+  .land-cta-title {
+    font-size: 26px;
+  }
+  .land-cta-actions {
+    flex-direction: column;
+  }
+  .land-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Auth: hide the brand panel, show the form full-width */
+  .auth-layout {
+    grid-template-columns: 1fr;
+  }
+  .auth-brand {
+    display: none;
+  }
+
+  /* Toasts span the width with small margins instead of a narrow corner stack */
+  .toast-stack {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    align-items: stretch;
+  }
+}

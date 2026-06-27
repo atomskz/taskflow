@@ -54,6 +54,37 @@
   height: 30px;
 }
 
+/* Mobile nav: hamburger button (hidden on desktop, shown via responsive.css)
+   and the drawer backdrop. */
+.lay-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+.lay-burger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text);
+  margin: 0 auto;
+}
+.lay-burger:hover {
+  background: var(--hover);
+}
+.app-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 55;
+  animation: ff 0.2s ease both;
+}
+
 .lay-topbar-title {
   flex: 1;
   min-width: 0;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AppLayout.css';
 import { Outlet, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Icon } from '../ui.jsx';
@@ -28,14 +28,14 @@ function NavItem({ to, icon, label, badge }) {
   );
 }
 
-function Sidebar() {
+function Sidebar({ open }) {
   const navigate = useNavigate();
   const { user, tasks, openCreate, logout } = useApp();
   const activeCount = tasks.filter(isActive).length;
   const initials = (user?.name || '?').split(/\s+/).map((p) => p[0]).slice(0, 2).join('').toUpperCase();
   const doLogout = () => { logout(); navigate('/'); };
   return (
-    <aside className="sidebar">
+    <aside className={'sidebar' + (open ? ' is-open' : '')}>
       <button onClick={() => navigate('/dashboard')} className="sidebar__brand">
         <div className="brand-mark">
           <Icon name="check" size={18} color="#fff" strokeWidth={2.5} />
@@ -77,12 +77,17 @@ function Sidebar() {
   );
 }
 
-function Topbar() {
+function Topbar({ onMenu }) {
   const { openCmd, openCreate } = useApp();
   const loc = useLocation();
   const [title, sub] = TITLES[loc.pathname] || ['', ''];
   return (
     <header className="topbar">
+      <button onClick={onMenu} className="lay-burger" aria-label="Открыть меню">
+        <span />
+        <span />
+        <span />
+      </button>
       <div className="lay-topbar-title">
         <h1 className="topbar__title">{title}</h1>
         <p className="topbar__sub">{sub}</p>
@@ -138,6 +143,11 @@ function FullPageLoader() {
 
 export default function AppLayout() {
   const { isAuth, bootstrapping, cmdOpen, modal, openCmd, closeCmd, closeModal } = useApp();
+  const [navOpen, setNavOpen] = useState(false);
+  const location = useLocation();
+
+  // Close the mobile nav drawer whenever the route changes.
+  useEffect(() => { setNavOpen(false); }, [location.pathname]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -160,9 +170,10 @@ export default function AppLayout() {
 
   return (
     <div className="app-shell">
-      <Sidebar />
+      <Sidebar open={navOpen} />
+      {navOpen && <div className="app-nav-backdrop" onClick={() => setNavOpen(false)} />}
       <div className="app-body">
-        <Topbar />
+        <Topbar onMenu={() => setNavOpen(true)} />
         <main className="app-main">
           <Outlet />
         </main>
