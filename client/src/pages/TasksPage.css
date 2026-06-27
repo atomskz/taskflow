@@ -180,3 +180,9 @@
   margin: 7px 0 18px;
   font-size: 14px;
 }
+
+.tasks-loadmore {
+  display: flex;
+  justify-content: center;
+  padding: 18px 0 4px;
+}

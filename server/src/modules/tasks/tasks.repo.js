@@ -6,14 +6,79 @@ import { rowToTask } from './tasks.mapper.js';
 
 export function listByUser(userId) {
   const rows = db
-    .prepare('SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC')
+    .prepare(
+      'SELECT * FROM tasks WHERE user_id = ? AND deleted_at IS NULL ORDER BY created_at DESC'
+    )
     .all(userId);
   return rows.map(rowToTask);
 }
 
 export function findByIdForUser(id, userId) {
-  const row = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(id, userId);
+  const row = db
+    .prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ? AND deleted_at IS NULL')
+    .get(id, userId);
   return rowToTask(row);
+}
+
+// ORDER BY clauses keyed by the sort option. Priority uses an explicit rank so
+// 'critical' > 'high' > 'medium' > 'low'; due_asc puts tasks without a date last.
+const SORT_SQL = {
+  created_desc: 'created_at DESC',
+  created_asc: 'created_at ASC',
+  due_asc: 'due_date IS NULL, due_date ASC',
+  priority_desc:
+    "CASE priority WHEN 'critical' THEN 4 WHEN 'high' THEN 3 WHEN 'medium' THEN 2 ELSE 1 END DESC",
+  title_asc: 'title COLLATE NOCASE ASC',
+};
+
+// Build the shared WHERE clause + bound params from a normalized filter object.
+// `today` is the caller's local date ('YYYY-MM-DD') so overdue/today match what
+// the user sees regardless of server timezone.
+function buildWhere(userId, f) {
+  const where = ['user_id = ?', 'deleted_at IS NULL'];
+  const params = [userId];
+
+  if (f.status === 'all') {
+    where.push("status != 'archived'");
+    if (!f.includeCompleted) where.push("status != 'done'");
+  } else {
+    where.push('status = ?');
+    params.push(f.status);
+  }
+  if (f.priority !== 'all') {
+    where.push('priority = ?');
+    params.push(f.priority);
+  }
+  if (f.onlyOverdue) {
+    where.push("due_date IS NOT NULL AND due_date < ? AND status NOT IN ('done','archived')");
+    params.push(f.today);
+  }
+  if (f.onlyToday) {
+    where.push('(calendar_date = ? OR due_date = ?)');
+    params.push(f.today, f.today);
+  }
+  if (f.search) {
+    // Substring match over title/description/tags (tags are stored as JSON text).
+    where.push('(title LIKE ? OR description LIKE ? OR tags LIKE ?)');
+    const like = `%${f.search}%`;
+    params.push(like, like, like);
+  }
+  return { clause: where.join(' AND '), params };
+}
+
+// Filtered + sorted + paginated query. Returns the page plus the total count of
+// all matching rows (for pagination UI). All inputs are bound parameters.
+export function query(userId, f) {
+  const { clause, params } = buildWhere(userId, f);
+  const order = SORT_SQL[f.sort] || SORT_SQL.created_desc;
+
+  const total = db.prepare(`SELECT COUNT(*) AS n FROM tasks WHERE ${clause}`).get(...params).n;
+
+  const rows = db
+    .prepare(`SELECT * FROM tasks WHERE ${clause} ORDER BY ${order} LIMIT ? OFFSET ?`)
+    .all(...params, f.limit, f.offset);
+
+  return { tasks: rows.map(rowToTask), total };
 }
 
 export function insert(userId, data) {

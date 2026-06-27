@@ -2,19 +2,20 @@ import React from 'react';
 import './TasksPage.css';
 import { Icon } from '../ui.jsx';
 import { useApp } from '../store.jsx';
-import { filterSortTasks, taskVM } from '../lib/tasks.js';
+import { taskVM } from '../lib/tasks.js';
 import TaskCard from '../components/TaskCard.jsx';
 
 const STATUS_CHIPS = [['all', 'Все'], ['todo', 'К выполнению'], ['in_progress', 'В работе'], ['done', 'Выполнено'], ['archived', 'Архив']];
 const PRI_CHIPS = [['all', 'Любой'], ['low', 'Низкий'], ['medium', 'Средний'], ['high', 'Высокий'], ['critical', 'Критичный']];
 
 export default function TasksPage() {
-  const { tasks, filters, sort, settings, forcedTasks, tasksLoading, tasksError, reloadTasks, setFilter, toggleFilter, setSort, resetFilters, openCreate } = useApp();
+  const { pagedTasks, pagedTotal, pagedLoading, pagedError, loadMoreTasks, filters, sort, forcedTasks, reloadTasks, setFilter, toggleFilter, setSort, resetFilters, openCreate } = useApp();
 
-  // Real loading/error from the API, plus the demo overrides from Settings.
-  const loading = tasksLoading || forcedTasks === 'loading';
-  const error = (!!tasksError && !tasksLoading) || forcedTasks === 'error';
-  const list = filterSortTasks(tasks, filters, sort, settings, forcedTasks);
+  // Server-driven list, plus the demo state overrides from Settings.
+  const loading = pagedLoading || forcedTasks === 'loading';
+  const error = (!!pagedError && !pagedLoading) || forcedTasks === 'error';
+  const list = forcedTasks === 'empty' ? [] : pagedTasks;
+  const total = forcedTasks === 'empty' ? 0 : pagedTotal;
   const q = (filters.search || '').trim();
   const activeFilterCount =
     (filters.status !== 'all' ? 1 : 0) +
@@ -25,6 +26,7 @@ export default function TasksPage() {
   const isFiltered = activeFilterCount > 0;
   const empty = !loading && !error && list.length === 0;
   const show = !loading && !error && list.length > 0;
+  const hasMore = show && list.length < total;
 
   return (
     <div className="page tasks-page">
@@ -66,7 +68,7 @@ export default function TasksPage() {
 
       {/* Count row */}
       <div className="tasks-countrow">
-        <div className="tasks-count">Найдено <b className="tasks-countnum">{list.length}</b> из {tasks.length}</div>
+        <div className="tasks-count">Найдено <b className="tasks-countnum">{total}</b>{list.length < total ? ` · показано ${list.length}` : ''}</div>
         {isFiltered && (
           <button onClick={resetFilters} className="tasks-reset">
             <Icon name="refresh" size={14} />Сбросить
@@ -111,9 +113,18 @@ export default function TasksPage() {
       )}
 
       {show && (
-        <div className="tasks-list">
-          {list.map((t) => <TaskCard key={t.id} vm={taskVM(t)} />)}
-        </div>
+        <>
+          <div className="tasks-list">
+            {list.map((t) => <TaskCard key={t.id} vm={taskVM(t)} />)}
+          </div>
+          {hasMore && (
+            <div className="tasks-loadmore">
+              <button onClick={loadMoreTasks} className="btn btn--ghost btn--md">
+                Показать ещё ({total - list.length})
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

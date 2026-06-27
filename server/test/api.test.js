@@ -131,6 +131,53 @@ test('create rejects endTime before startTime', async () => {
   assert.ok(body.error.fields.endTime);
 });
 
+test('tasks query: filter by status/priority, search, sort, paginate', async () => {
+  // fresh user so counts are deterministic
+  const reg = await fetch(`${base}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Query', email: 'query@x.io', password: 'abcd1234' }),
+  });
+  const tok = (await json(reg)).token;
+  const h = () => ({ Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' });
+
+  const make = (body) => fetch(`${base}/tasks`, { method: 'POST', headers: h(), body: JSON.stringify(body) });
+  await make({ title: 'Alpha report', priority: 'low', tags: ['work'] });
+  await make({ title: 'Beta launch', priority: 'critical', tags: ['urgent'] });
+  await make({ title: 'Gamma cleanup', priority: 'high', tags: ['work'] });
+
+  // no filters → all three, with total
+  let res = await fetch(`${base}/tasks`, { headers: h() });
+  let body = await json(res);
+  assert.equal(body.total, 3);
+  assert.equal(body.tasks.length, 3);
+
+  // priority filter
+  res = await fetch(`${base}/tasks?priority=critical`, { headers: h() });
+  body = await json(res);
+  assert.equal(body.total, 1);
+  assert.equal(body.tasks[0].title, 'Beta launch');
+
+  // search (matches title or tags)
+  res = await fetch(`${base}/tasks?search=work`, { headers: h() });
+  body = await json(res);
+  assert.equal(body.total, 2);
+
+  // sort by priority desc → critical first
+  res = await fetch(`${base}/tasks?sort=priority_desc`, { headers: h() });
+  body = await json(res);
+  assert.equal(body.tasks[0].priority, 'critical');
+
+  // pagination: limit 2 returns 2 of total 3
+  res = await fetch(`${base}/tasks?limit=2&offset=0`, { headers: h() });
+  body = await json(res);
+  assert.equal(body.total, 3);
+  assert.equal(body.tasks.length, 2);
+  res = await fetch(`${base}/tasks?limit=2&offset=2`, { headers: h() });
+  body = await json(res);
+  assert.equal(body.tasks.length, 1);
+});
+
 test('settings: returns defaults, persists a patch, rejects bad values', async () => {
   // defaults for a fresh user
   let res = await fetch(`${base}/settings`, { headers: auth() });

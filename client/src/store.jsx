@@ -58,6 +58,15 @@ export function AppProvider({ children }) {
   const [tasksLoading, setTasksLoading] = useState(false);
   const [tasksError, setTasksError] = useState(null);
 
+  // Server-side filtered/sorted/paginated list for the Tasks page (separate from
+  // the full `tasks` list, which the calendar/command-palette still need).
+  const [pagedTasks, setPagedTasks] = useState([]);
+  const [pagedTotal, setPagedTotal] = useState(0);
+  const [pagedLoading, setPagedLoading] = useState(false);
+  const [pagedError, setPagedError] = useState(null);
+  // Bumped on any task mutation so the paged list refetches to stay in sync.
+  const [tasksVersion, setTasksVersion] = useState(0);
+
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [sort, setSort] = useState('created_desc');
   const [calYear, setCalYear] = useState(new Date().getFullYear());
@@ -117,7 +126,10 @@ export function AppProvider({ children }) {
   const dismissToast = (id) => setToasts((t) => t.filter((x) => x.id !== id));
 
   // ---- task list helpers ----
-  const upsertLocal = (task) =>
+  // Bump the version so the server-driven Tasks page refetches (a mutation may
+  // move a task in/out of the active filter or change its sort position).
+  const bumpTasks = () => setTasksVersion((v) => v + 1);
+  const upsertLocal = (task) => {
     setTasks((list) => {
       const i = list.findIndex((t) => t.id === task.id);
       if (i === -1) return [task, ...list];
@@ -125,7 +137,12 @@ export function AppProvider({ children }) {
       next[i] = task;
       return next;
     });
-  const removeLocal = (id) => setTasks((list) => list.filter((t) => t.id !== id));
+    bumpTasks();
+  };
+  const removeLocal = (id) => {
+    setTasks((list) => list.filter((t) => t.id !== id));
+    bumpTasks();
+  };
 
   const fetchTasks = async () => {
     setTasksLoading(true);
@@ -143,11 +160,73 @@ export function AppProvider({ children }) {
   const reloadTasks = async () => {
     setForcedTasks('normal');
     try {
-      await fetchTasks();
+      await Promise.all([fetchTasks(), fetchTaskPage()]);
     } catch {
       /* error surfaced via tasksError */
     }
   };
+
+  // ---- server-side paged task query (Tasks page) ----
+  const PAGE_SIZE = 30;
+  const localToday = () => {
+    const d = new Date();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${m}-${day}`;
+  };
+  // Translate the current UI filters/sort into server query params.
+  const taskParams = (offset) => ({
+    status: filters.status,
+    priority: filters.priority,
+    search: filters.search,
+    onlyOverdue: filters.onlyOverdue,
+    onlyToday: filters.onlyToday,
+    includeCompleted: settings.showCompleted,
+    sort,
+    today: localToday(),
+    limit: PAGE_SIZE,
+    offset,
+  });
+  const fetchTaskPage = async () => {
+    setPagedLoading(true);
+    setPagedError(null);
+    try {
+      const { tasks: rows, total } = await tasksApi.queryTasks(taskParams(0));
+      setPagedTasks(rows);
+      setPagedTotal(total);
+    } catch (e) {
+      setPagedError(e.message || 'Не удалось загрузить задачи');
+    } finally {
+      setPagedLoading(false);
+    }
+  };
+  const loadMoreTasks = async () => {
+    try {
+      const { tasks: rows } = await tasksApi.queryTasks(taskParams(pagedTasks.length));
+      setPagedTasks((cur) => [...cur, ...rows]);
+    } catch {
+      /* keep what we have; user can retry */
+    }
+  };
+
+  // Refetch the first page whenever the filters, sort, completed-visibility, or
+  // a mutation (tasksVersion) change. Debounced so typing in search isn't chatty.
+  useEffect(() => {
+    if (!isAuth) return undefined;
+    const t = setTimeout(fetchTaskPage, 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isAuth,
+    filters.status,
+    filters.priority,
+    filters.search,
+    filters.onlyOverdue,
+    filters.onlyToday,
+    sort,
+    settings.showCompleted,
+    tasksVersion,
+  ]);
 
   // ---- session bootstrap (restore from stored token on first load) ----
   useEffect(() => {
@@ -467,6 +546,7 @@ export function AppProvider({ children }) {
     tasks, isAuth, user, settings, filters, sort, calYear, calMonth,
     modal, draft, errors, toasts, cmdOpen, cmdQuery, forcedTasks, loading,
     bootstrapping, tasksLoading, tasksError,
+    pagedTasks, pagedTotal, pagedLoading, pagedError, loadMoreTasks,
     authForm, authErrors,
     // actions
     toast, dismissToast,

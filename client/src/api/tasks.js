@@ -2,9 +2,22 @@
 // shape the React components already consume.
 import { api } from './client.js';
 
+// Full list (up to the server cap). Used by the calendar and command palette,
+// which need the whole set rather than a filtered page.
 export async function listTasks() {
-  const { tasks } = await api.get('/tasks');
+  const { tasks } = await api.get('/tasks?limit=500');
   return tasks;
+}
+
+// Server-side filtered/sorted/paginated query for the tasks list view.
+// `params` mirrors the store's filters/sort plus { limit, offset, today }.
+// Returns { tasks, total } where total is the full match count.
+export async function queryTasks(params = {}) {
+  const qs = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v !== undefined && v !== null && v !== '') qs.set(k, String(v));
+  }
+  return api.get(`/tasks?${qs.toString()}`);
 }
 
 export async function getTask(id) {

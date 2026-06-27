@@ -20,6 +20,13 @@ export function list(userId) {
   return repo.listByUser(userId);
 }
 
+// Filtered/sorted/paginated query. `opts` is the validated query object; we
+// default `today` to the server's date when the client didn't supply its own.
+export function query(userId, opts) {
+  const today = opts.today || nowIso().slice(0, 10);
+  return repo.query(userId, { ...opts, today });
+}
+
 export function get(id, userId) {
   const task = repo.findByIdForUser(id, userId);
   if (!task) throw notFound('Задача не найдена');

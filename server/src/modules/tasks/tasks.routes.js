@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { requireAuth } from '../../middleware/auth.js';
 import { validate } from '../../middleware/validate.js';
-import { createTaskSchema, updateTaskSchema } from './tasks.validation.js';
+import { createTaskSchema, updateTaskSchema, listQuerySchema } from './tasks.validation.js';
 import * as tasks from './tasks.service.js';
 
 export const tasksRouter = Router();
@@ -9,10 +9,13 @@ export const tasksRouter = Router();
 // Every task route requires authentication; req.userId is set by requireAuth.
 tasksRouter.use(requireAuth);
 
-// GET /api/tasks — all of the current user's tasks (filtering/sorting is done
-// client-side, matching the existing UI; see docs/api.md for query options).
+// GET /api/tasks — filtered, sorted, paginated tasks for the current user.
+// Query params (all optional): status, priority, search, onlyOverdue, onlyToday,
+// includeCompleted, sort, today, limit, offset. Returns { tasks, total } where
+// total is the count of all matching rows (for pagination). See docs/api.md.
 tasksRouter.get('/', (req, res) => {
-  res.json({ tasks: tasks.list(req.userId) });
+  const opts = listQuerySchema.parse(req.query);
+  res.json(tasks.query(req.userId, opts));
 });
 
 // POST /api/tasks/reset-demo — wipe and reseed the user's demo tasks.
