@@ -93,11 +93,11 @@ export default function LandingPage() {
               <div className="land-preview-donut">
                 <div className="land-preview-donut-title">По статусам</div>
                 <svg width="120" height="120" viewBox="0 0 120 120">
-                  <circle cx="60" cy="60" r="46" fill="none" stroke="#f1f2f4" strokeWidth="15" />
+                  <circle cx="60" cy="60" r="46" fill="none" stroke="var(--border-2)" strokeWidth="15" />
                   <circle cx="60" cy="60" r="46" fill="none" stroke="#16a34a" strokeWidth="15" strokeDasharray="144 289" strokeDashoffset="0" transform="rotate(-90 60 60)" strokeLinecap="round" />
                   <circle cx="60" cy="60" r="46" fill="none" stroke="#2563eb" strokeWidth="15" strokeDasharray="72 289" strokeDashoffset="-148" transform="rotate(-90 60 60)" strokeLinecap="round" />
-                  <text x="60" y="56" textAnchor="middle" fontSize="22" fontWeight="800" fill="#1c1d22">20</text>
-                  <text x="60" y="73" textAnchor="middle" fontSize="10" fill="#9a9ca6" fontWeight="600">задач</text>
+                  <text x="60" y="56" textAnchor="middle" fontSize="22" fontWeight="800" fill="var(--text)">20</text>
+                  <text x="60" y="73" textAnchor="middle" fontSize="10" fill="var(--text-3)" fontWeight="600">задач</text>
                 </svg>
               </div>
             </div>
