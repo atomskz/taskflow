@@ -8,10 +8,18 @@ import { tasksRouter } from './modules/tasks/tasks.routes.js';
 import { settingsRouter } from './modules/settings/settings.routes.js';
 import { dashboardRouter } from './modules/dashboard/dashboard.routes.js';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
+import { securityHeaders } from './middleware/security.js';
+import { requestLog } from './middleware/request-log.js';
 
 export function createApp() {
   const app = express();
 
+  // Trust the reverse proxy (nginx/Caddy) so req.ip reflects X-Forwarded-For.
+  app.set('trust proxy', 1);
+  app.disable('x-powered-by');
+
+  app.use(securityHeaders);
+  app.use(requestLog);
   app.use(
     cors({
       origin: config.corsOrigin === '*' ? true : config.corsOrigin.split(',').map((s) => s.trim()),

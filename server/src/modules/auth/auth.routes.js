@@ -3,10 +3,20 @@ import { validate } from '../../middleware/validate.js';
 import { requireAuth } from '../../middleware/auth.js';
 import { registerSchema, loginSchema } from './auth.validation.js';
 import { readCookie, setRefreshCookie, clearRefreshCookie } from '../../utils/cookies.js';
+import { createRateLimiter } from '../../middleware/rate-limit.js';
 import { config } from '../../config.js';
 import * as authService from './auth.service.js';
 
 export const authRouter = Router();
+
+// Throttle credential-guessing on the auth endpoints (per IP). The bearer-token
+// data routes are not limited.
+const authLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: 50,
+  message: 'Слишком много попыток. Подождите минуту и попробуйте снова.',
+});
+authRouter.use(['/login', '/register', '/refresh'], authLimiter);
 
 // Set the refresh cookie and return the access token + user as JSON. The raw
 // refresh token never appears in the response body.

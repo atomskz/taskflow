@@ -31,7 +31,20 @@ export const config = {
   },
 };
 
-if (config.isProd && config.jwt.secret.startsWith('dev-only')) {
-  // eslint-disable-next-line no-console
-  console.warn('[config] WARNING: JWT_SECRET is using the insecure default in production.');
+// Refuse to boot in production with a weak/placeholder secret. The defaults
+// shipped in the repo (.env.example, docker-compose) are intentionally caught.
+const INSECURE_SECRETS = new Set([
+  'dev-only-change-me-to-a-long-random-string',
+  'change-me-to-a-long-random-string',
+]);
+function secretIsInsecure(secret) {
+  return INSECURE_SECRETS.has(secret) || /change-me/i.test(secret) || secret.length < 16;
+}
+
+if (config.isProd && secretIsInsecure(config.jwt.secret)) {
+  throw new Error(
+    '[config] JWT_SECRET is missing, too short, or using a known default. Set a strong ' +
+      'JWT_SECRET (e.g. `node -e "console.log(require(\'crypto\').randomBytes(48).toString(\'hex\'))"`) ' +
+      'before starting in production.'
+  );
 }

@@ -14,3 +14,4 @@ export const unauthorized = (msg = 'Требуется авторизация') 
 export const forbidden = (msg = 'Доступ запрещён') => new ApiError(403, msg);
 export const notFound = (msg = 'Не найдено') => new ApiError(404, msg);
 export const conflict = (msg) => new ApiError(409, msg);
+export const tooManyRequests = (msg = 'Слишком много запросов') => new ApiError(429, msg);

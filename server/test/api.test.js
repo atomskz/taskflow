@@ -13,6 +13,7 @@ process.env.JWT_SECRET = 'test-secret';
 
 const { createApp } = await import('../src/app.js');
 const { migrate } = await import('../src/db/migrate.js');
+const { createRateLimiter } = await import('../src/middleware/rate-limit.js');
 
 let server;
 let base;
@@ -88,6 +89,29 @@ test('wrong password returns generic 401', async () => {
 test('tasks require auth', async () => {
   const res = await fetch(`${base}/tasks`);
   assert.equal(res.status, 401);
+});
+
+test('security headers are set on responses', async () => {
+  const res = await fetch(`${base}/health`);
+  assert.equal(res.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(res.headers.get('x-frame-options'), 'DENY');
+  assert.equal(res.headers.get('x-powered-by'), null); // disabled
+});
+
+test('rate limiter blocks after the configured max', () => {
+  const limiter = createRateLimiter({ windowMs: 1000, max: 2, message: 'stop' });
+  const req = { ip: '9.9.9.9', socket: {} };
+  const run = () => {
+    const res = { setHeader() {} };
+    let err = null;
+    limiter(req, res, (e) => { err = e; });
+    return err;
+  };
+  assert.ok(!run()); // 1st ok
+  assert.ok(!run()); // 2nd ok
+  const blocked = run(); // 3rd blocked
+  assert.ok(blocked);
+  assert.equal(blocked.status, 429);
 });
 
 // Pull the refresh cookie value out of a Set-Cookie response.

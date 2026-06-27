@@ -9,9 +9,9 @@ services:
     environment:
       PORT: "4000"
       NODE_ENV: production
-      # Override in a root .env file or your shell for anything non-local.
-      JWT_SECRET: "${JWT_SECRET:-change-me-to-a-long-random-string}"
-      JWT_EXPIRES_IN: "604800"
+      # Set JWT_SECRET in a root .env file — required in production (the server
+      # refuses to boot with a default/short secret when NODE_ENV=production).
+      JWT_SECRET: "${JWT_SECRET:?set JWT_SECRET in your .env file}"
       DATABASE_FILE: "./data/taskflow.db"
       # Restrict to the public origin; override via .env for other deployments.
       CORS_ORIGIN: "${CORS_ORIGIN:-https://${DOMAIN}}"

@@ -2,14 +2,16 @@
 import { createApp } from './app.js';
 import { config } from './config.js';
 import { migrate } from './db/migrate.js';
+import { logger } from './utils/logger.js';
 
 migrate(); // idempotent: create tables on first run
 
 const app = createApp();
 
 app.listen(config.port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`[server] TaskFlow API listening on http://localhost:${config.port}`);
-  // eslint-disable-next-line no-console
-  console.log(`[server] CORS origin: ${config.corsOrigin}`);
+  logger.info('server started', {
+    port: config.port,
+    env: config.isProd ? 'production' : 'development',
+    corsOrigin: config.corsOrigin,
+  });
 });

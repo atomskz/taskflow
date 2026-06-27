@@ -164,8 +164,9 @@ npm run docker:up      # = docker compose up --build
 # открыть http://localhost:8080
 ```
 
-- **client** — nginx раздаёт собранный SPA на порту **8080** и проксирует `/api` на сервис `server` (см. [client/nginx.conf](client/nginx.conf)).
-- **server** — API на порту **4000** (проброшен наружу для отладки), БД SQLite хранится в именованном volume `taskflow-data`, поэтому данные переживают перезапуск.
+- **caddy** — терминирует TLS (автоматический сертификат Let's Encrypt для `$DOMAIN`), редиректит http→https и проксирует на `client`. Слушает порты **80/443**.
+- **client** — nginx раздаёт собранный SPA и проксирует `/api` на сервис `server` (см. [client/nginx.conf](client/nginx.conf)). Наружу не публикуется — доступ только через `caddy`.
+- **server** — API на порту **4000** (только во внутренней сети), БД SQLite хранится в именованном volume `taskflow-data`, поэтому данные переживают перезапуск.
 - При первом старте пустая БД автоматически заполняется демо-данными (`server/src/db/ensure-seed.js`); при последующих запусках сид пропускается.
 
 ```bash
@@ -175,7 +176,12 @@ npm run docker:down            # остановить (= docker compose down)
 npm run docker:reset           # остановить и удалить volume с данными (= down -v)
 ```
 
-> **Перед публичным деплоем** задайте `JWT_SECRET`: скопируйте `.env.example` → `.env` в корне и впишите длинную случайную строку (docker compose подхватит её автоматически).
+### Чек-лист production-готовности
+
+- **`JWT_SECRET`** — обязателен. Скопируйте `.env.example` → `.env` в корне и впишите длинную случайную строку (`node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`). В режиме `NODE_ENV=production` сервер **не стартует** с дефолтным/коротким секретом.
+- **`DOMAIN`** — домен для HTTPS (нужна A-запись на сервер, открытые порты 80/443). Caddy сам получит и продлит сертификат.
+- **Безопасность API** — включены security-заголовки (nosniff, X-Frame-Options, HSTS в prod), rate limiting на `/api/auth/*`, структурированные JSON-логи запросов.
+- **Сессии** — короткоживущий access-токен (15 мин) + refresh-токен в httpOnly-cookie с ротацией и серверным отзывом.
 
 ## Работа с базой данных
 
