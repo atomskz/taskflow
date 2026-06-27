@@ -149,6 +149,13 @@ export default function AppLayout() {
   // Close the mobile nav drawer whenever the route changes.
   useEffect(() => { setNavOpen(false); }, [location.pathname]);
 
+  // Lock page scroll while the drawer is open, so scrolling the page behind it
+  // can't move the address bar (which would make the fixed drawer jitter).
+  useEffect(() => {
+    document.body.style.overflow = navOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [navOpen]);
+
   useEffect(() => {
     const onKey = (e) => {
       const k = e.key.toLowerCase();
