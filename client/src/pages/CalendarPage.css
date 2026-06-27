@@ -82,10 +82,10 @@
   background: var(--surface);
 }
 .cal-day--today {
-  background: #f4f5ff;
+  background: var(--accent-soft);
 }
 .cal-day--out {
-  background: #fbfbfc;
+  background: var(--canvas);
 }
 .cal-day:hover {
   background: var(--hover);

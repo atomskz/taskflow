@@ -31,20 +31,20 @@
    instead of literal colors, so they adapt automatically. Set via the
    data-theme attribute on <html> (see store.jsx). */
 :root[data-theme='dark'] {
-  --canvas: #0f1115;
-  --surface: #181b21;
-  --surface-2: #1f232b;
-  --hover: #242832;
-  --text: #e7e8ec;
-  --text-2: #a8acb6;
-  --text-3: #6f747f;
-  --border: #2a2e37;
-  --border-2: #363b45;
+  --canvas: #1c1f26;
+  --surface: #262a33;
+  --surface-2: #2f333d;
+  --hover: #353a45;
+  --text: #e8eaef;
+  --text-2: #aab0bb;
+  --text-3: #767c88;
+  --border: #363b45;
+  --border-2: #454b57;
   --accent: #6366f1;
   --accent-h: #818cf8;
-  --accent-soft: #20232e;
-  --accent-soft-2: #2a2e3d;
-  --accent-text: #aeb4ff;
+  --accent-soft: #2a2e3b;
+  --accent-soft-2: #343a4b;
+  --accent-text: #b4baff;
   --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --sh: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
   --sh-md: 0 8px 20px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);
