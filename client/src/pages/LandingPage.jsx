@@ -4,13 +4,15 @@ import { Icon } from '../ui.jsx';
 import { useApp } from '../store.jsx';
 import './LandingPage.css';
 
+// Icon chip backgrounds use a translucent tint of `color` so they adapt to the
+// active theme instead of staying as bright pastels in dark mode.
 const FEATURES = [
-  { icon: 'checkSquare', color: '#4f46e5', bg: 'var(--accent-soft)', title: 'Управление задачами', text: 'Создавайте, редактируйте, завершайте и удаляйте задачи. Статусы и приоритеты под рукой.' },
-  { icon: 'calendar', color: '#2563eb', bg: '#e8f0fe', title: 'Календарь', text: 'Планируйте задачи по датам и времени. Создавайте задачи прямо из ячейки календаря.' },
-  { icon: 'barChart', color: '#16a34a', bg: '#e7f6ed', title: 'Дашборд и статистика', text: 'Сводка по задачам, прогресс недели и диаграммы по статусам и приоритетам.' },
-  { icon: 'flag', color: '#ea580c', bg: '#fdece1', title: 'Приоритеты', text: 'Четыре уровня — от низкого до критичного. Цвет и текст, чтобы ничего не упустить.' },
-  { icon: 'search', color: '#7c3aed', bg: '#f1eafe', title: 'Фильтры и поиск', text: 'Мгновенный поиск и фильтры по статусу, приоритету и срокам. Без перезагрузок.' },
-  { icon: 'shield', color: '#dc2626', bg: '#fdeaea', title: 'Только ваши данные', text: 'Защищённые маршруты и личный аккаунт. Вы видите только свои задачи.' },
+  { icon: 'checkSquare', color: '#6366f1', bg: 'rgba(99,102,241,0.16)', title: 'Управление задачами', text: 'Создавайте, редактируйте, завершайте и удаляйте задачи. Статусы и приоритеты под рукой.' },
+  { icon: 'calendar', color: '#2563eb', bg: 'rgba(37,99,235,0.16)', title: 'Календарь', text: 'Планируйте задачи по датам и времени. Создавайте задачи прямо из ячейки календаря.' },
+  { icon: 'barChart', color: '#16a34a', bg: 'rgba(22,163,74,0.16)', title: 'Дашборд и статистика', text: 'Сводка по задачам, прогресс недели и диаграммы по статусам и приоритетам.' },
+  { icon: 'flag', color: '#ea580c', bg: 'rgba(234,88,12,0.16)', title: 'Приоритеты', text: 'Четыре уровня — от низкого до критичного. Цвет и текст, чтобы ничего не упустить.' },
+  { icon: 'search', color: '#7c3aed', bg: 'rgba(124,58,237,0.18)', title: 'Фильтры и поиск', text: 'Мгновенный поиск и фильтры по статусу, приоритету и срокам. Без перезагрузок.' },
+  { icon: 'shield', color: '#dc2626', bg: 'rgba(220,38,38,0.16)', title: 'Только ваши данные', text: 'Защищённые маршруты и личный аккаунт. Вы видите только свои задачи.' },
 ];
 
 export default function LandingPage() {

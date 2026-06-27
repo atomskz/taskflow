@@ -24,6 +24,7 @@
   --sh-lg: 0 20px 56px rgba(24, 25, 34, 0.18), 0 8px 18px rgba(24, 25, 34, 0.08);
   --mono: 'JetBrains Mono', ui-monospace, monospace;
   --sans: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+  --topbar-bg: rgba(246, 247, 249, 0.82);
   color-scheme: light;
 }
 
@@ -45,6 +46,7 @@
   --accent-soft: #2a2e3b;
   --accent-soft-2: #343a4b;
   --accent-text: #b4baff;
+  --topbar-bg: rgba(28, 31, 38, 0.82);
   --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --sh: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
   --sh-md: 0 8px 20px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);

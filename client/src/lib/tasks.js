@@ -15,12 +15,13 @@ export function dueInfo(t) {
   if (!t.dueDate) return null;
   const diff = diffDays(parse(t.dueDate), today());
   const done = t.status === 'done' || t.status === 'archived';
-  if (done) return { text: fmt(t.dueDate), color: '#9aa0aa', bg: '#eef0f2' };
-  if (diff < 0) return { text: 'Просрочено на ' + -diff + ' дн.', color: '#dc2626', bg: '#fdeaea' };
-  if (diff === 0) return { text: 'Сегодня', color: '#ea580c', bg: '#fdece1' };
-  if (diff === 1) return { text: 'Завтра', color: '#b45309', bg: '#fdf3e2' };
-  if (diff <= 7) return { text: 'Через ' + diff + ' дн.', color: '#3f6212', bg: '#eef6e6' };
-  return { text: fmt(t.dueDate), color: '#5b6470', bg: '#eef0f2' };
+  // Translucent backgrounds + dark-readable text so badges work in both themes.
+  if (done) return { text: fmt(t.dueDate), color: '#9aa0aa', bg: 'rgba(154,160,170,0.16)' };
+  if (diff < 0) return { text: 'Просрочено на ' + -diff + ' дн.', color: '#ef4444', bg: 'rgba(220,38,38,0.15)' };
+  if (diff === 0) return { text: 'Сегодня', color: '#f97316', bg: 'rgba(234,88,12,0.15)' };
+  if (diff === 1) return { text: 'Завтра', color: '#d97706', bg: 'rgba(217,119,6,0.16)' };
+  if (diff <= 7) return { text: 'Через ' + diff + ' дн.', color: '#65a30d', bg: 'rgba(101,163,13,0.16)' };
+  return { text: fmt(t.dueDate), color: '#8b92a0', bg: 'rgba(139,146,160,0.16)' };
 }
 
 // Short "when" label used in dashboard lists.
@@ -28,11 +29,11 @@ export function whenInfo(t) {
   const ds = t.calendarDate || t.dueDate;
   if (!ds) return { text: '', color: '#9aa0aa' };
   const diff = diffDays(parse(ds), today());
-  if (diff < 0) return { text: fmt(ds), color: '#dc2626' };
-  if (diff === 0) return { text: 'Сегодня', color: '#ea580c' };
-  if (diff === 1) return { text: 'Завтра', color: '#b45309' };
-  if (diff <= 7) return { text: 'Через ' + diff + ' дн.', color: '#5b6470' };
-  return { text: fmt(ds), color: '#5b6470' };
+  if (diff < 0) return { text: fmt(ds), color: '#ef4444' };
+  if (diff === 0) return { text: 'Сегодня', color: '#f97316' };
+  if (diff === 1) return { text: 'Завтра', color: '#d97706' };
+  if (diff <= 7) return { text: 'Через ' + diff + ' дн.', color: '#8b92a0' };
+  return { text: fmt(ds), color: '#8b92a0' };
 }
 
 // Display-only view model for a task (no handlers — those live in components).

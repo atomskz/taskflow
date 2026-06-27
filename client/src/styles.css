@@ -126,7 +126,7 @@
   align-items: center;
   gap: 16px;
   padding: 14px 28px;
-  background: rgba(246, 247, 249, 0.82);
+  background: var(--topbar-bg);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
 }
