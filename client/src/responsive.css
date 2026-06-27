@@ -9,7 +9,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
+    height: 100vh; /* fallback for older browsers */
+    height: 100dvh; /* exclude the mobile browser chrome so the footer is visible */
     width: 260px;
     z-index: 60;
     transform: translateX(-100%);
