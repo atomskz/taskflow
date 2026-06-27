@@ -14,6 +14,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Apply the cached theme before paint to avoid a light flash in dark mode. -->
+    <script>
+      try {
+        var s = JSON.parse(localStorage.getItem('taskflow.settings.v1') || 'null');
+        document.documentElement.dataset.theme = s && s.theme === 'dark' ? 'dark' : 'light';
+      } catch (e) {
+        /* default light */
+      }
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

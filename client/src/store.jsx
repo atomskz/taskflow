@@ -87,6 +87,13 @@ export function AppProvider({ children }) {
     }
   }, [settings]);
 
+  // Reflect the chosen theme onto <html data-theme> so the dark-mode CSS tokens
+  // (index.css) take effect. Runs on every theme change, including the initial
+  // value loaded from the cache/server.
+  useEffect(() => {
+    document.documentElement.dataset.theme = settings.theme === 'dark' ? 'dark' : 'light';
+  }, [settings.theme]);
+
   // Debounced server sync for settings. Accumulates changed fields and flushes
   // a single PATCH so dragging a slider doesn't spam the API.
   const settingsSaveTimer = useRef(null);

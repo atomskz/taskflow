@@ -155,8 +155,8 @@
   transition: all 0.12s;
 }
 .topbar__search:hover {
-  border-color: #cfd0d8;
-  background: #fff;
+  border-color: var(--border-2);
+  background: var(--surface);
 }
 
 .full-loader {
@@ -663,7 +663,7 @@
   padding: 2px;
   transition: all 0.18s;
   flex-shrink: 0;
-  background: #d1d3da;
+  background: var(--border-2);
 }
 .switch.is-on {
   background: var(--accent);

@@ -4,16 +4,12 @@ import { useApp } from '../store.jsx';
 import './SettingsPage.css';
 
 export default function SettingsPage() {
-  const { settings, setSetting, resetDemo, setForcedTasks, toast } = useApp();
+  const { settings, setSetting, resetDemo, setForcedTasks } = useApp();
   const navigate = useNavigate();
 
   const goState = (state) => {
     setForcedTasks(state);
     if (state !== 'normal') navigate('/tasks');
-  };
-  const setDark = () => {
-    setSetting('theme', 'dark');
-    toast('info', 'Тёмная тема появится в версии 2');
   };
 
   return (
@@ -24,7 +20,7 @@ export default function SettingsPage() {
         <div className="set-section-sub">Тема оформления интерфейса</div>
         <div className="seg-group set-seg-theme">
           <button onClick={() => setSetting('theme', 'light')} className={'seg' + (settings.theme === 'light' ? ' is-active' : '')}>☀ Светлая</button>
-          <button onClick={setDark} className={'seg' + (settings.theme === 'dark' ? ' is-active' : '')}>☾ Тёмная</button>
+          <button onClick={() => setSetting('theme', 'dark')} className={'seg' + (settings.theme === 'dark' ? ' is-active' : '')}>☾ Тёмная</button>
         </div>
       </div>
 
