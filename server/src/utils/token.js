@@ -12,7 +12,7 @@ const b64urlJson = (obj) => b64url(JSON.stringify(obj));
 function sign(payload) {
   const header = { alg: 'HS256', typ: 'JWT' };
   const now = Math.floor(Date.now() / 1000);
-  const body = { iat: now, exp: now + config.jwt.expiresIn, ...payload };
+  const body = { iat: now, exp: now + config.jwt.accessExpiresIn, ...payload };
   const data = `${b64urlJson(header)}.${b64urlJson(body)}`;
   const sig = b64url(createHmac('sha256', config.jwt.secret).update(data).digest());
   return `${data}.${sig}`;

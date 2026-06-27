@@ -95,8 +95,16 @@ type Task = {
 
 ---
 
+### `POST /api/auth/refresh`
+Обновление сессии. Читает refresh-токен из httpOnly-cookie `taskflow_refresh`, отзывает его и выдаёт новый access-токen + ротированную cookie. Тело не требуется.
+
+**200** → `{ "token": string }` (новый access-токен)
+**Ошибки**: `401` — cookie отсутствует, истёк или уже отозван.
+
+---
+
 ### `POST /api/auth/logout`
-Завершение сессии. При stateless-JWT — no-op (клиент удаляет токен сам). Предусмотрен для симметрии/расширения.
+Отзывает refresh-токен (из cookie) на сервере и очищает cookie. Клиент дополнительно удаляет свой access-токен.
 
 **204** → пустой ответ.
 
@@ -251,7 +259,8 @@ type Task = {
 | POST   | `/api/auth/register`        | Регистрация             | —           |
 | POST   | `/api/auth/login`           | Вход                    | —           |
 | GET    | `/api/auth/me`              | Текущий пользователь    | ✔           |
-| POST   | `/api/auth/logout`          | Выход                   | —           |
+| POST   | `/api/auth/refresh`         | Обновить access-токен   | cookie      |
+| POST   | `/api/auth/logout`          | Выход                   | cookie      |
 | GET    | `/api/tasks`                | Список задач            | ✔           |
 | POST   | `/api/tasks`                | Создать задачу          | ✔           |
 | GET    | `/api/tasks/:id`            | Получить задачу         | ✔           |

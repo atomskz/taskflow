@@ -14,7 +14,12 @@ export const config = {
   isProd: env.NODE_ENV === 'production',
   jwt: {
     secret: env.JWT_SECRET || 'dev-only-change-me-to-a-long-random-string',
-    expiresIn: Number(env.JWT_EXPIRES_IN) || 60 * 60 * 24 * 7, // seconds
+    // Short-lived access token; sessions are kept alive by the refresh cookie.
+    accessExpiresIn: Number(env.ACCESS_TOKEN_TTL) || 60 * 15, // seconds (15 min)
+  },
+  refresh: {
+    expiresIn: Number(env.REFRESH_TOKEN_TTL) || 60 * 60 * 24 * 30, // seconds (30 days)
+    cookieName: 'taskflow_refresh',
   },
   // Resolve the DB path relative to server/ so scripts work from any cwd.
   databaseFile: path.resolve(serverRoot, env.DATABASE_FILE || './data/taskflow.db'),

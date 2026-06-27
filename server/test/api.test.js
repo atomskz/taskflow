@@ -90,6 +90,46 @@ test('tasks require auth', async () => {
   assert.equal(res.status, 401);
 });
 
+// Pull the refresh cookie value out of a Set-Cookie response.
+const refreshCookie = (res) => {
+  const set = res.headers.getSetCookie?.() || [];
+  const hit = set.find((c) => c.startsWith('taskflow_refresh='));
+  return hit ? hit.split(';')[0] : null; // "taskflow_refresh=<value>"
+};
+
+test('refresh: rotates the token, logout revokes it', async () => {
+  const reg = await fetch(`${base}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Refresh', email: 'refresh@x.io', password: 'abcd1234' }),
+  });
+  assert.equal(reg.status, 201);
+  const cookie1 = refreshCookie(reg);
+  assert.ok(cookie1, 'register sets a refresh cookie');
+
+  // refresh with the cookie → new access token + rotated cookie
+  let res = await fetch(`${base}/auth/refresh`, { method: 'POST', headers: { Cookie: cookie1 } });
+  assert.equal(res.status, 200);
+  assert.ok((await json(res)).token);
+  const cookie2 = refreshCookie(res);
+  assert.ok(cookie2 && cookie2 !== cookie1, 'refresh rotates the cookie');
+
+  // the old (now revoked) cookie can no longer refresh
+  res = await fetch(`${base}/auth/refresh`, { method: 'POST', headers: { Cookie: cookie1 } });
+  assert.equal(res.status, 401);
+
+  // logout revokes the current cookie
+  res = await fetch(`${base}/auth/logout`, { method: 'POST', headers: { Cookie: cookie2 } });
+  assert.equal(res.status, 204);
+  res = await fetch(`${base}/auth/refresh`, { method: 'POST', headers: { Cookie: cookie2 } });
+  assert.equal(res.status, 401);
+});
+
+test('refresh without a cookie is rejected', async () => {
+  const res = await fetch(`${base}/auth/refresh`, { method: 'POST' });
+  assert.equal(res.status, 401);
+});
+
 const auth = () => ({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
 
 test('create, complete and delete a task', async () => {

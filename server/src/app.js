@@ -15,6 +15,7 @@ export function createApp() {
   app.use(
     cors({
       origin: config.corsOrigin === '*' ? true : config.corsOrigin.split(',').map((s) => s.trim()),
+      credentials: true, // allow the httpOnly refresh cookie on cross-origin requests
     })
   );
   app.use(express.json({ limit: '256kb' }));
