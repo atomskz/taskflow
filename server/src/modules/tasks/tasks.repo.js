@@ -126,9 +126,34 @@ export function update(id, userId, fields) {
   return findByIdForUser(id, userId);
 }
 
-export function remove(id, userId) {
-  const info = db.prepare('DELETE FROM tasks WHERE id = ? AND user_id = ?').run(id, userId);
+// Soft delete: stamp deleted_at so the task drops out of every normal query but
+// can still be restored from the trash.
+export function softDelete(id, userId) {
+  const info = db
+    .prepare(
+      'UPDATE tasks SET deleted_at = ?, updated_at = ? WHERE id = ? AND user_id = ? AND deleted_at IS NULL'
+    )
+    .run(nowIso(), nowIso(), id, userId);
   return info.changes > 0;
+}
+
+export function restore(id, userId) {
+  const info = db
+    .prepare(
+      'UPDATE tasks SET deleted_at = NULL, updated_at = ? WHERE id = ? AND user_id = ? AND deleted_at IS NOT NULL'
+    )
+    .run(nowIso(), id, userId);
+  if (info.changes === 0) return null;
+  return findByIdForUser(id, userId);
+}
+
+export function listDeletedByUser(userId) {
+  const rows = db
+    .prepare(
+      'SELECT * FROM tasks WHERE user_id = ? AND deleted_at IS NOT NULL ORDER BY deleted_at DESC'
+    )
+    .all(userId);
+  return rows.map(rowToTask);
 }
 
 export function deleteAllForUser(userId) {

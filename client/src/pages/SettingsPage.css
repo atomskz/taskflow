@@ -100,3 +100,42 @@
   font-weight: 600;
   font-size: 13.5px;
 }
+
+/* Trash section */
+.set-trash-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.set-trash-list {
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+}
+.set-trash-empty {
+  color: var(--text-3);
+  font-size: 14px;
+  padding: 12px 2px;
+}
+.set-trash-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--border);
+}
+.set-trash-row:last-child {
+  border-bottom: none;
+}
+.set-trash-title {
+  font-size: 14px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.set-trash-restore {
+  flex-shrink: 0;
+}

@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store.jsx';
 import './SettingsPage.css';
 
 export default function SettingsPage() {
-  const { settings, setSetting, resetDemo, setForcedTasks } = useApp();
+  const { settings, setSetting, resetDemo, setForcedTasks, trash, trashLoading, loadTrash, restoreTask } = useApp();
   const navigate = useNavigate();
+  const [trashOpen, setTrashOpen] = useState(false);
+
+  // Load the trash the first time the section is expanded.
+  useEffect(() => {
+    if (trashOpen) loadTrash();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trashOpen]);
 
   const goState = (state) => {
     setForcedTasks(state);
@@ -74,6 +81,34 @@ export default function SettingsPage() {
           <div className="set-data-sub">Восстановить демонстрационные задачи</div>
         </div>
         <button onClick={resetDemo} className="btn btn--ghost set-reset-btn">Сбросить демо</button>
+      </div>
+
+      {/* Trash */}
+      <div className="card card--pad">
+        <div className="set-trash-head">
+          <div>
+            <div className="set-data-title">Корзина</div>
+            <div className="set-data-sub">Удалённые задачи можно восстановить</div>
+          </div>
+          <button onClick={() => setTrashOpen((v) => !v)} className="btn btn--ghost set-reset-btn">
+            {trashOpen ? 'Скрыть' : 'Открыть'}
+          </button>
+        </div>
+        {trashOpen && (
+          <div className="set-trash-list">
+            {trashLoading && <div className="set-trash-empty">Загрузка…</div>}
+            {!trashLoading && trash.length === 0 && <div className="set-trash-empty">Корзина пуста</div>}
+            {!trashLoading &&
+              trash.map((t) => (
+                <div key={t.id} className="set-trash-row">
+                  <span className="set-trash-title">{t.title}</span>
+                  <button onClick={() => restoreTask(t.id)} className="btn btn--ghost set-trash-restore">
+                    Восстановить
+                  </button>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );

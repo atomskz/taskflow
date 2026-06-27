@@ -75,9 +75,19 @@ export function archive(id, userId) {
 }
 
 export function remove(id, userId) {
-  const ok = repo.remove(id, userId);
+  const ok = repo.softDelete(id, userId);
   if (!ok) throw notFound('Задача не найдена');
   return true;
+}
+
+export function restore(id, userId) {
+  const task = repo.restore(id, userId);
+  if (!task) throw notFound('Задача не найдена');
+  return task;
+}
+
+export function listDeleted(userId) {
+  return repo.listDeletedByUser(userId);
 }
 
 // Replace the user's tasks with a fresh copy of the demo set (anchored to today).

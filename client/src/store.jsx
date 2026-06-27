@@ -507,6 +507,30 @@ export function AppProvider({ children }) {
     setCalMonth(n.getMonth());
   };
 
+  // ---- trash (soft-deleted tasks) ----
+  const [trash, setTrash] = useState([]);
+  const [trashLoading, setTrashLoading] = useState(false);
+  const loadTrash = async () => {
+    setTrashLoading(true);
+    try {
+      setTrash(await tasksApi.listTrash());
+    } catch (e) {
+      toast('error', (e && e.message) || 'Не удалось загрузить корзину');
+    } finally {
+      setTrashLoading(false);
+    }
+  };
+  const restoreTask = async (id) => {
+    try {
+      const task = await tasksApi.restoreTask(id);
+      setTrash((list) => list.filter((t) => t.id !== id));
+      upsertLocal(task); // back into the live list (bumps the paged view)
+      toast('success', 'Задача восстановлена');
+    } catch (e) {
+      toast('error', (e && e.message) || 'Не удалось восстановить задачу');
+    }
+  };
+
   // ---- settings ----
   const setSetting = (field, val) => {
     setSettings((s) => ({ ...s, [field]: val }));
@@ -555,6 +579,7 @@ export function AppProvider({ children }) {
     saveTask, completeTask, reopenTask, archiveTask, deleteTaskConfirmed,
     setFilter, toggleFilter, setSort, resetFilters,
     calShift, calToday,
+    trash, trashLoading, loadTrash, restoreTask,
     setSetting, resetDemo, setForcedTasks, reloadTasks,
     openCmd, closeCmd, setCmdQuery,
   };

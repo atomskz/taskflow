@@ -58,3 +58,13 @@ export async function resetDemoTasks() {
   const { tasks } = await api.post('/tasks/reset-demo');
   return tasks;
 }
+
+export async function listTrash() {
+  const { tasks } = await api.get('/tasks/trash');
+  return tasks;
+}
+
+export async function restoreTask(id) {
+  const { task } = await api.post(`/tasks/${id}/restore`);
+  return task;
+}

@@ -23,6 +23,11 @@ tasksRouter.post('/reset-demo', (req, res) => {
   res.json({ tasks: tasks.resetDemo(req.userId) });
 });
 
+// GET /api/tasks/trash — soft-deleted tasks (must precede the /:id route).
+tasksRouter.get('/trash', (req, res) => {
+  res.json({ tasks: tasks.listDeleted(req.userId) });
+});
+
 // POST /api/tasks — create a task.
 tasksRouter.post('/', validate(createTaskSchema), (req, res) => {
   res.status(201).json({ task: tasks.create(req.userId, req.validated) });
@@ -38,10 +43,15 @@ tasksRouter.patch('/:id', validate(updateTaskSchema), (req, res) => {
   res.json({ task: tasks.update(req.params.id, req.userId, req.validated) });
 });
 
-// DELETE /api/tasks/:id — permanently delete.
+// DELETE /api/tasks/:id — soft delete (moves the task to the trash).
 tasksRouter.delete('/:id', (req, res) => {
   tasks.remove(req.params.id, req.userId);
   res.status(204).end();
+});
+
+// POST /api/tasks/:id/restore — restore a soft-deleted task from the trash.
+tasksRouter.post('/:id/restore', (req, res) => {
+  res.json({ task: tasks.restore(req.params.id, req.userId) });
 });
 
 // POST /api/tasks/:id/complete — mark done, stamp completedAt.

@@ -160,6 +160,37 @@ test('create, complete and delete a task', async () => {
   assert.equal(res.status, 404);
 });
 
+test('soft delete: task goes to trash and can be restored', async () => {
+  // create + delete
+  let res = await fetch(`${base}/tasks`, {
+    method: 'POST',
+    headers: auth(),
+    body: JSON.stringify({ title: 'Trash me' }),
+  });
+  const id = (await json(res)).task.id;
+  res = await fetch(`${base}/tasks/${id}`, { method: 'DELETE', headers: auth() });
+  assert.equal(res.status, 204);
+
+  // gone from normal reads
+  res = await fetch(`${base}/tasks/${id}`, { headers: auth() });
+  assert.equal(res.status, 404);
+
+  // present in the trash
+  res = await fetch(`${base}/tasks/trash`, { headers: auth() });
+  const trash = (await json(res)).tasks;
+  assert.ok(trash.some((t) => t.id === id));
+
+  // restore brings it back
+  res = await fetch(`${base}/tasks/${id}/restore`, { method: 'POST', headers: auth() });
+  assert.equal(res.status, 200);
+  res = await fetch(`${base}/tasks/${id}`, { headers: auth() });
+  assert.equal(res.status, 200);
+
+  // and it is no longer in the trash
+  res = await fetch(`${base}/tasks/trash`, { headers: auth() });
+  assert.ok(!(await json(res)).tasks.some((t) => t.id === id));
+});
+
 test('create rejects endTime before startTime', async () => {
   const res = await fetch(`${base}/tasks`, {
     method: 'POST',
