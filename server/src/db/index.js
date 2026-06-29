@@ -12,3 +12,11 @@ export const db = new DatabaseSync(config.databaseFile);
 // Pragmas: enforce FKs and use WAL for better concurrent read/write behaviour.
 db.exec('PRAGMA foreign_keys = ON;');
 db.exec('PRAGMA journal_mode = WAL;');
+
+// Unicode-aware lowercase. SQLite's built-in LOWER()/LIKE only fold ASCII, so
+// Cyrillic (and other non-ASCII) search would be case-sensitive. Use this in
+// queries — `ulower(col) LIKE ?` with a JS-lowercased pattern — for proper
+// case-insensitive search.
+db.function('ulower', { deterministic: true }, (value) =>
+  value == null ? null : String(value).toLowerCase()
+);

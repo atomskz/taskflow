@@ -58,9 +58,10 @@ function buildWhere(userId, f) {
     params.push(f.today, f.today);
   }
   if (f.search) {
-    // Substring match over title/description/tags (tags are stored as JSON text).
-    where.push('(title LIKE ? OR description LIKE ? OR tags LIKE ?)');
-    const like = `%${f.search}%`;
+    // Case-insensitive substring match over title/description/tags (tags are
+    // stored as JSON text). ulower() folds case for non-ASCII too (see db/index.js).
+    where.push('(ulower(title) LIKE ? OR ulower(description) LIKE ? OR ulower(tags) LIKE ?)');
+    const like = `%${f.search.toLowerCase()}%`;
     params.push(like, like, like);
   }
   return { clause: where.join(' AND '), params };

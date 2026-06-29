@@ -273,6 +273,23 @@ test('tasks query: filter by status/priority, search, sort, paginate', async () 
   assert.equal(body.tasks.length, 1);
 });
 
+test('search is case-insensitive, including Cyrillic', async () => {
+  const reg = await fetch(`${base}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Case', email: 'case@x.io', password: 'abcd1234' }),
+  });
+  const tok = (await json(reg)).token;
+  const h = () => ({ Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' });
+  await fetch(`${base}/tasks`, { method: 'POST', headers: h(), body: JSON.stringify({ title: 'Купить Молоко' }) });
+
+  for (const q of ['купить', 'КУПИТЬ', 'молоко', 'МоЛоКо']) {
+    const res = await fetch(`${base}/tasks?search=${encodeURIComponent(q)}`, { headers: h() });
+    const body = await json(res);
+    assert.equal(body.total, 1, `search "${q}" should match`);
+  }
+});
+
 test('dashboard: aggregates counts and lists', async () => {
   const reg = await fetch(`${base}/auth/register`, {
     method: 'POST',
